@@ -1,0 +1,5 @@
+.container {
+    background-color: var(--foreground-color);
+    opacity: 0.3;
+    margin: auto;
+}

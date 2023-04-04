@@ -1,0 +1,10 @@
+.container {
+    width: fit-content;
+    max-width: 80%;
+    padding: 6px 10px 6px 10px;
+    border: 2px solid var(--foreground-color);
+    color: var(--foreground-color);
+    font-weight: normal;
+    font-size: 17px;
+    border-radius: 20px;
+}

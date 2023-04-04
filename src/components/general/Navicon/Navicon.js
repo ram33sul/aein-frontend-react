@@ -1,0 +1,13 @@
+import React from 'react'
+import style from './Navicon.module.css'
+
+function Navicon({src, alt, label, imageWidth, width, active}) {
+  return (
+    <div className={style.container} style={{width: width || 'fit-content', opacity: active ? 1 : ''}}>
+        <img src={src} style={{width: imageWidth || '40px'}} alt={alt || 'loading'} />
+        { label ? <div className={style.label}>{label}</div> : ''}
+    </div>
+  )
+}
+
+export default Navicon

@@ -1,0 +1,34 @@
+.container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.header {
+    display: flex;
+    align-items: flex-end;
+    gap: 10px;
+}
+
+.messages-wrapper {
+    border: 1px solid var(--foreground-color);
+    padding: 15px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.actions-container {
+    width: 100%;
+    margin: auto;
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.actions-container-1 {
+    display: flex;
+    gap: 10px;
+}

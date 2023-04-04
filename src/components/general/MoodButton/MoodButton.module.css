@@ -1,0 +1,17 @@
+.container {
+    width: fit-content;
+    padding: 2px 5px 2px 5px;
+    background-color: var(--background-color);
+    border: 1px solid;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: var(--transition), opacity 0.2s, transform 0.2s;
+}
+
+.container:hover {
+    opacity: 0.5;
+}
+
+.container:active {
+    transform: scale(1.1);
+}

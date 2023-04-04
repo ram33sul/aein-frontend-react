@@ -1,0 +1,48 @@
+.container {
+    width: 100%;
+    min-width: 200px;
+    height: 50px;
+    display: flex;
+    gap: 10px;
+    cursor: pointer;
+}
+
+.username-message-notificationCount {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+}
+
+.username-notificationCount {
+    display: flex;
+    width: 100%;
+    gap: 5px;
+}
+
+.notificationCount {
+    height: 15px;
+    width: 15px;
+    min-width: fit-content;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    color: var(--background-color);
+    background-color: var(--foreground-color);
+    font-weight: bold;
+}
+
+.notificationCount-plus {
+    margin-left: -4px;
+    font-weight: bold;
+    color: var(--foreground-color);
+}
+.message {
+    font-size: 13px;
+    opacity: 0.5;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    color: var(--foreground-color);
+}

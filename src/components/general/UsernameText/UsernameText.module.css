@@ -1,0 +1,5 @@
+.container {
+    font-weight: bold;
+    color: var(--foreground-color);
+    width: fit-content;
+}

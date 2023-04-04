@@ -1,0 +1,6 @@
+.container {
+    width: fit-content;
+    color: var(--foreground-color);
+    opacity: 0.5;
+    font-weight: normal;
+}

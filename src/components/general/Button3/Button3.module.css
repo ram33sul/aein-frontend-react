@@ -1,0 +1,15 @@
+.container {
+    border: 2px solid var(--foreground-color);
+    border-radius: 10px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.image {
+    width: 80%;
+    height: 80%;
+    background-color: transparent;
+}
