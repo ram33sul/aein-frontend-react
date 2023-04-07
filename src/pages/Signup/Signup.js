@@ -45,7 +45,6 @@ function Signup() {
             return;
         }
         if(nameError || usernameError || emailError || mobileError || passwordError || confirmPasswordError){
-            console.log("hee");
             return;
         }
         dispatch(fetchUserRequest())

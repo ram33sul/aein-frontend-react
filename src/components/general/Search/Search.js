@@ -1,11 +1,11 @@
 import React from 'react'
 import styles from './Search.module.css'
-function Search({placeholder, setValue}) {
+function Search({placeholder, onChange, value}) {
 
-    setValue = setValue || (() => {});
-    
+    onChange = onChange || (() => {});
+
   return (
-    <input onChange={(e) => setValue(e.target.value)} placeholder={placeholder || 'Search...'} className={styles.input} />
+    <input onChange={onChange} value={value} placeholder={placeholder || 'Search...'} className={styles.input} />
   )
 }
 

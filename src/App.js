@@ -33,7 +33,7 @@ function App() {
         <Routes>
           <Route path='/login' element={ user.username ? <Navigate to='/' /> : <Login />} />
           <Route path='/signup' element={ user.username ? <Navigate to='/' /> : <Signup />} />
-          <Route path='/' element={user.username ? <Home /> : <Navigate to='/login' />} />
+          <Route path='/*' element={user.username ? <Home /> : <Navigate to='/login' />} />
         </Routes>
       </div>
   );

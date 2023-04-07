@@ -1,6 +1,7 @@
 import React from 'react'
 import styles from './Button3.module.css'
-function Button3({fill, imageType, size, onClick}) {
+import Loading from '../Loading/Loading';
+function Button3({fill, imageType, size, onClick, loading}) {
 
     imageType = imageType ?? 'filter'
     size = size ?? '40px';
@@ -9,10 +10,13 @@ function Button3({fill, imageType, size, onClick}) {
 
     let imageSrc = `./icons/${fill ? 'white' : 'black'}/${imageType}-icon-${fill ? 'white' : 'black'}.png`;
 
+    onClick = onClick ?? (() => {});
+    onClick = loading === true ? (() => {}) : onClick;
 
   return (
     <div onClick={onClick} className={styles.container} style={{height: size, width: size, minWidth: size, minHeight: size, backgroundColor, color}}>
         <img src={imageSrc} alt='icon' className={styles.image}/>
+        { loading ? <div className={styles.loading}> <Loading scale='0.4'/> </div> : '' }
     </div>
   )
 }

@@ -2,18 +2,20 @@ import React from 'react'
 import styles from './MessagesOutlook.module.css'
 import ProfilePicture from '../ProfilePicture/ProfilePicture';
 import UsernameText from '../UsernameText/UsernameText';
-function MessagesOutlook({imageSrc, username, message, notificationCount, setValueChat}) {
+function MessagesOutlook({imageSrc, username, message, notificationCount, setValueChat, onClick}) {
 
-    imageSrc = imageSrc || '';
-    username = username || 'username';
-    message = message || 'messages this jl sljf s ljd fdlfjd dljf dfj dfdjfdf jdfjdf jd qlj dfj dfkjdf djfjd fdjfhd jdfd jdfjdhf kdfh kfhk kdfjkhdfj dkjfhkjdhf dkfkjd mjdh kdhf h dfkh dkhdf kdhf dkfhdf dfihf ddkfhdf ';
-    notificationCount = notificationCount || 9;
+    imageSrc = imageSrc ?? '';
+    username = username ?? 'username';
+    message = message ?? 'messages this jl sljf s ljd fdlfjd dljf dfj dfdjfdf jdfjdf jd qlj dfj dfkjdf djfjd fdjfhd jdfd jdfjdhf kdfh kfhk kdfjkhdfj dkjfhkjdhf dkfkjd mjdh kdhf h dfkh dkhdf kdhf dkfhdf dfihf ddkfhdf ';
+    notificationCount = notificationCount ?? 0;
+    notificationCount = notificationCount > 9 ? 9 : notificationCount;
+    onClick = onClick ?? (() => {});
   return (
-    <div className={styles.container} onClick={setValueChat ? () => setValueChat(true) : () => {}}>
+    <div className={styles.container} onClick={onClick}>
         <ProfilePicture size='50px' borderWidth='0'/>
         <div className={styles['username-message-notificationCount']}>
             <div className={styles['username-notificationCount']}>
-                <UsernameText content={username} size='15px' />
+                <UsernameText username={username} size='15px' />
                 <div className={styles.notificationCount}>
                     {notificationCount}
                 </div>

@@ -45,13 +45,13 @@ function Login() {
     useEffect(() => {
         setErrorMessage('');
 
-        /* global google */
-        google.accounts.id.initialize({
+        const google = window.google;
+        google?.accounts?.id?.initialize({
             client_id: "701782588563-4p0khl7oj5jujkngdc49bf0jls0kv948.apps.googleusercontent.com",
             callback: handleGoogleLogin
         })
 
-        google.accounts.id.renderButton(
+        google?.accounts?.id?.renderButton(
             document.getElementById("google-login-button"),
             {
                 theme: "outline",

@@ -1,0 +1,83 @@
+.container {
+    width: 50px;
+    height: 30px;
+    min-width: 50px;
+    min-height: 30px;
+    position: relative;
+}
+
+.round {
+    border-radius: 50%;
+    height: 10px;
+    width: 10px;
+    background-color: var(--foreground-color);
+    position: absolute;
+    animation-duration: 1.5s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+    opacity: 0.5;
+}
+
+.round:nth-child(1){
+    left: 0;
+    top: 50%;
+    animation-name: round-one;
+}
+
+.round:nth-child(2){
+    left: 25px;
+    top: 50%;
+    transform: translateX(-50%);
+    animation-name: round-two;
+}
+
+.round:nth-child(3){
+    right: 0;
+    top: 50%;
+    animation-name: round-three;
+}
+
+@keyframes round-one {
+    0% {
+        top: 50%;
+        opacity: 0.5;
+    }
+    25% {
+        top: 0;
+        opacity: 1;
+    }
+    50% {
+        top: 50%;
+        opacity: 0.5;
+    }
+}
+
+@keyframes round-two {
+    25% {
+        top: 50%;
+        opacity: 0.5;
+    }
+    50% {
+        top: 0;
+        opacity: 1;
+    }
+    75% {
+        top: 50%;
+        opacity: 0.5;
+    }
+}
+
+@keyframes round-three {
+    50% {
+        top: 50%;
+        opacity: 0.5;
+    }
+    75% {
+        top: 0;
+        opacity: 1;
+    }
+    100% {
+        top: 50%;
+        opacity: 0.5;
+    }
+}

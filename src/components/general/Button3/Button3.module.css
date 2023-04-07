@@ -6,10 +6,23 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    position: relative;
 }
 
 .image {
     width: 80%;
     height: 80%;
     background-color: transparent;
+}
+
+.loading {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--background-color);
 }
