@@ -4,6 +4,7 @@
     min-width: 50px;
     min-height: 30px;
     position: relative;
+    background-color: transparent;
 }
 
 .round {

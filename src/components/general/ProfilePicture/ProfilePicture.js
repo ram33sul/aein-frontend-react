@@ -9,7 +9,7 @@ function ProfilePicture({imageSrc, size, borderColor, borderWidth}) {
 
   return (
     <div className={styles.container} style={{borderColor, borderWidth, width: size, height: size, minWidth: size}}>
-        <img src='./images/ronaldo.jpeg' alt='ronaldo' className={styles.image} />
+        <img src='/images/ronaldo.jpeg' alt='profile' className={styles.image} />
     </div>
   )
 }

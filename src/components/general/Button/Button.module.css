@@ -1,12 +1,21 @@
 .container {
-    background-color: rgb(255, 215, 0);
+    background-color: var(--gold-color);
     padding: 5px;
     border-radius: 5px;
     color: var(--background-color);
     font-weight: bold;
     text-align: center;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: var(--transition), color 0s, opacity 0.2s, transform 0.2s;
+    display: flex;
+    justify-content: center;
+    position: relative;
+}
+
+.loading {
+    position: absolute;
+    top: 0;
+    background-color: transparent;
 }
 
 .container:hover {

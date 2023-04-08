@@ -5,12 +5,12 @@ import Navicon from '../../general/Navicon/Navicon'
 import ProfilePicture from '../../general/ProfilePicture/ProfilePicture'
 import UsernameText from '../../general/UsernameText/UsernameText'
 import useMediaQuery from '../../../customHooks/mediaQuery'
-import axios from 'axios'
-import { useDispatch } from 'react-redux'
-import { fetchUserLogout } from '../../../redux/user/userActions'
 import { useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 
 function Navbar({active}) {
+
+    const params = new URLSearchParams(window.location.search);
 
     const feed = active === 'feed' ? true : false;
     const explore = active === 'explore' ? true : false;
@@ -19,20 +19,12 @@ function Navbar({active}) {
     const messages = active === 'messages' ? true : false;
 
     const isMessage = useMediaQuery('(max-width: 650px)');
-    const icon = isMessage ? 'messages' : 'settings'
+    const icon = isMessage ? 'Messages' : 'Settings'
     const iconActive = icon === 'settings' ? settings : messages;
-    const src = `./icons/black/${icon === 'messages' ? 'Aein' : 'settings'}-icon-black.png`;
+    const src = `./icons/black/${icon === 'Messages' ? 'Aein' : 'settings'}-icon-black.png`;
 
-    const dispatch = useDispatch();
     const username = useSelector((state) => state.user.username);
-
-    const handleLogout = () => {
-        axios.get('/logout').then((response) => {
-            dispatch(fetchUserLogout());
-        }).catch((error) => {
-            console.log(error);
-        })
-    }
+    const navigate = useNavigate()
  
 
   return (
@@ -42,15 +34,15 @@ function Navbar({active}) {
                 <Logo width='70px' />
             </div>
             <div className={styles['buttons-container']}>
-                <Navicon src='./icons/black/feed-icon-black.png' alt='feed-icon' label='Feed' active={feed}/>
-                <Navicon src='./icons/black/explore-icon-black.png' alt='feed-icon' label='Explore' active={explore}/>
-                <Navicon src='./icons/black/Aein-icon-black.png' alt='feed-icon' label='Notifications' active={notifications}/>
-                <Navicon src={src} alt='feed-icon' label={icon} active={iconActive}/>
+                <Navicon src='./icons/black/feed-icon-black.png' alt='feed-icon' label='Feed' active={feed} onClick={() => navigate('/')}/>
+                <Navicon src='./icons/black/explore-icon-black.png' alt='feed-icon' label='Explore' active={explore} onClick={() => navigate('/explore')}/>
+                <Navicon src='./icons/black/Aein-icon-black.png' alt='feed-icon' label='Notifications' active={notifications} onClick={() => navigate('/notifications')}/>
+                <Navicon src={src} alt='feed-icon' label={icon} active={iconActive} onClick={() => navigate(`/${icon.toLowerCase()}`)}/>
             </div>
-            <div className={styles.profileWrap} onClick={handleLogout}>
+            <div className={styles.profileWrap} onClick={() => navigate(`/profile?username=${username}`)}>
                 <ProfilePicture size='40px' borderWidth='0'/>
                 <div className={styles.username}>
-                <UsernameText username={username ?? 'username'} />
+                <UsernameText username={username ?? 'username'} active={active === 'profile' && username === params.get("username")}/>
                 </div>
             </div>
         </div>

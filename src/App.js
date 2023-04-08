@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import './App.css';
 import Home from './pages/Home/Home';
 import { Routes, Route, Navigate } from 'react-router-dom';
@@ -10,6 +10,7 @@ import axios from 'axios';
 
 function App() {
   const user = useSelector((state) => state.user);
+  const [ loading, setLoading ] = useState(true);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -26,15 +27,19 @@ function App() {
       dispatch(fetchUserSuccess(response.data));
     }).catch((error) => {
       dispatch(fetchUserFailure(error))
+    }).finally(() => {
+      setLoading(false)
     })
   },[dispatch])
   return (
       <div className='container'>
+        {loading ? '' :
         <Routes>
-          <Route path='/login' element={ user.username ? <Navigate to='/' /> : <Login />} />
-          <Route path='/signup' element={ user.username ? <Navigate to='/' /> : <Signup />} />
-          <Route path='/*' element={user.username ? <Home /> : <Navigate to='/login' />} />
+          <Route path='login' element={ user.username ? <Navigate to='/' /> : <Login />} />
+          <Route path='signup' element={ user.username ? <Navigate to='/' /> : <Signup />} />
+          <Route path='*' element={user.username ? <Home /> : <Navigate to='/login' />} />
         </Routes>
+        }
       </div>
   );
 }

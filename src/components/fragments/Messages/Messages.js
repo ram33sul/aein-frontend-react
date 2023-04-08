@@ -76,7 +76,7 @@ function Messages() {
                         <Loading /> : 
                     searchUsers.length ?
                             (searchUsers.map((user, index) => {
-                                return (<MessagesOutlook onClick={() => setChat(user)} username={user.username} key={user._id} message={`message from ${user.name}`} notificationCount={index} />)
+                                return (<MessagesOutlook onClick={() => setChat(user)} username={user.username} key={user._id} message={`${user.name}`} notificationCount={index} />)
                             })) :
                         'no results found') :
                     ( overallMessages.length !==0 ? (overallMessages.map((data) => {
@@ -89,7 +89,7 @@ function Messages() {
                             chat = data.from;
                             username = data.from.username;
                         }
-                        return(<MessagesOutlook onClick={() => setChat(chat)} username={username} key={data.messageId} message={data.content} />)
+                        return(<MessagesOutlook onClick={() => setChat(chat)} username={username} key={data.messageId} message={data.content} bold={!data.seen}/>)
                             })) : 'no messages yet'
                     )
             }

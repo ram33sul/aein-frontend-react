@@ -45,7 +45,7 @@
 }
 @media screen and (max-width: 1000px) {
     .wrapper {
-        position: absolute;
+        position: fixed;
         bottom: -1px;
         left: 0;
         width: 100vw;

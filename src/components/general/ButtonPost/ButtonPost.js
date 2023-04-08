@@ -8,7 +8,7 @@ function ButtonPost({type, theme, action, size, count}) {
     size = size || '40px';
     count = count || 0;
     const color = theme === 'light' ? 'black' : 'white';
-    const imageSrc = `./icons/${color}/${type}-icon-${color}.png`;
+    const imageSrc = `/icons/${color}/${type}-icon-${color}.png`;
 
   return (
     <div className={styles.container}>

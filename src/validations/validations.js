@@ -14,7 +14,7 @@ export const validateName = (name) => {
 export const validateUsername = (username) => {
     const validValue = /^[A-Za-z0-9]*$/;
     console.log("username: "+exists(username));
-    return exists(username) && validValue.test(username) && username.length < 16;
+    return exists(username) && validValue.test(username) && username.length < 16 && username.length > 3;
     // username must exist
     // username must be aplhanumeric without spaces
     // username must have a length less than 16
@@ -27,8 +27,8 @@ export const validateMobile = (mobile) => {
 }
 
 export const validatePassword = (password) => {
-    const validValue = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/;
-    return exists(password) && !validValue.test(password);
+    const validValue = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{6,}$/;
+    return exists(password) && validValue.test(password);
     // password must exist and shouldn't contain spaces
 }
 
