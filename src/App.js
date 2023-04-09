@@ -9,19 +9,15 @@ import { fetchUserFailure, fetchUserRequest, fetchUserSuccess } from './redux/us
 import axios from 'axios';
 
 function App() {
-  const user = useSelector((state) => state.user);
+  const user = useSelector((state) => state.user.user);
+  const theme = useSelector((state) => state.theme);
   const [ loading, setLoading ] = useState(true);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const mode = JSON.parse(localStorage.getItem('aein-app-mode'));
-    if(mode){
-      document.documentElement.style.setProperty('--background-color','black');
-      document.documentElement.style.setProperty('--foreground-color','white');
-    } else {
-      document.documentElement.style.setProperty('--background-color','white');
-      document.documentElement.style.setProperty('--foreground-color','black');
-    }
+    document.documentElement.style.setProperty('--background-color',theme.backgroundColor);
+    document.documentElement.style.setProperty('--foreground-color',theme.foregroundColor);
+
     dispatch(fetchUserRequest());
     axios.get('/verifyUser').then((response) => {
       dispatch(fetchUserSuccess(response.data));
@@ -30,7 +26,7 @@ function App() {
     }).finally(() => {
       setLoading(false)
     })
-  },[dispatch])
+  },[dispatch, theme])
   return (
       <div className='container'>
         {loading ? '' :

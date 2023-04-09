@@ -6,7 +6,10 @@ import Feed from '../../components/fragments/Feed/Feed'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import Profile from '../../components/fragments/Profile/Profile'
 import Explore from '../../components/fragments/Explore/Explore'
+import useMediaQuery from '../../customHooks/mediaQuery'
 function Home() {
+
+    const isWidth = useMediaQuery('(min-width: 650px)');
 
   return (
     <div className={styles.container}>
@@ -14,9 +17,10 @@ function Home() {
             <Route path='' element={<><Navbar active='feed' /> <Feed /></>} />
             <Route path='profile' element={<> <Navbar active='profile' /> <Profile /></>} />
             <Route path='explore' element={<> <Navbar active='explore' /> <Explore /></>} />
+            <Route path='messages' element= { isWidth ? <Navigate to="feed" /> : <> <Navbar active='messages' /> <Messages /></>} />
             <Route path='*' element={<><Navigate to="/" /></>} />
         </Routes>
-        <Messages />
+        { isWidth ? <Messages/> : ''}
     </div>
   )
 }

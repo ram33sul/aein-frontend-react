@@ -13,7 +13,7 @@ function Messages() {
     const [ searchUsers, setSearchUsers ] = useState([]);
     const [ searchInput, setSearchInput ] = useState('');
     const [ overallMessages, setOverallMessages ] = useState([]);
-    const user = useSelector((state) => state.user)
+    const user = useSelector((state) => state.user.user)
     const fromUserId = user?._id;
     const [ ws, setWs ] = useState({})
 
@@ -32,8 +32,11 @@ function Messages() {
     ws.onmessage = (response) => {
         response = JSON.parse(response.data);
         if(response.type === 'getOverallMessages'){
-            console.log(response.data);
             setOverallMessages(response.data);
+        } else if(response.type === 'sendMessage'){
+            if(response.data.to._id === fromUserId){
+                ws.send(JSON.stringify({userId: fromUserId, type: "getOverallMessages"}));
+            }
         }
         setSearchLoading(false)
     }
@@ -76,7 +79,7 @@ function Messages() {
                         <Loading /> : 
                     searchUsers.length ?
                             (searchUsers.map((user, index) => {
-                                return (<MessagesOutlook onClick={() => setChat(user)} username={user.username} key={user._id} message={`${user.name}`} notificationCount={index} />)
+                                return (<MessagesOutlook onClick={() => setChat(user)} username={user.username} key={user._id} message={`${user.name}`} bold={true}/>)
                             })) :
                         'no results found') :
                     ( overallMessages.length !==0 ? (overallMessages.map((data) => {
@@ -89,7 +92,7 @@ function Messages() {
                             chat = data.from;
                             username = data.from.username;
                         }
-                        return(<MessagesOutlook onClick={() => setChat(chat)} username={username} key={data.messageId} message={data.content} bold={!data.seen}/>)
+                        return(<MessagesOutlook onClick={() => setChat(chat)} username={username} key={data.messageId} message={data.content} bold={data.newMessageCount && data.newMessageCount > 0} notificationCount={data.newMessageCount}/>)
                             })) : 'no messages yet'
                     )
             }

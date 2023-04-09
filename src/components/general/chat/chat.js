@@ -14,8 +14,9 @@ function Chat({online, valueChat, onExit, toUser, ws}) {
   const [ allMessages, setAllMessages ] = useState([]);
   const [ scrollBehavior, setScrollBehavior ] = useState('');
   const [ sendLoading, setSendLoading ] = useState(false);
+  const [ isOnline, setIsOnline ] = useState(false);
 
-  const user = useSelector((state) => state.user);
+  const user = useSelector((state) => state.user.user);
   const fromUserId = user?._id;
 
   useEffect(() => {
@@ -34,7 +35,20 @@ function Chat({online, valueChat, onExit, toUser, ws}) {
     } else if (message.type === "sendMessage"){
       setMessage('');
       setAllMessages([...allMessages,message.data]);
+      if(message.data.to._id === fromUserId && ws.readyState === 1){
+        ws.send(JSON.stringify({ viewedUser: fromUserId, sentUser: toUser._id, type: "markSeen"}));
+      }
       setSendLoading(false)
+    } else if (message.type === "markSeen") {
+      setAllMessages(allMessages.map((message) => {
+        return {...message, seen: true};
+      }));
+    } else if (message.type === "isOnline") {
+      if(message.isOnline) {
+        setIsOnline(true);
+      } else {
+        setIsOnline(false);
+      }
     }
   }
 
@@ -47,6 +61,7 @@ function Chat({online, valueChat, onExit, toUser, ws}) {
     scrollToBottom();
     if(ws.readyState === 1){
       ws.send(JSON.stringify({from: fromUserId, to: toUser?._id, type: "getMessages"}));
+      ws.send(JSON.stringify({userIdToBeChecked: toUser?._id, userIdWhoIsChecking: fromUserId, type: "isOnline"}));
     }
   },[fromUserId, toUser, ws]);
 
@@ -77,15 +92,24 @@ function Chat({online, valueChat, onExit, toUser, ws}) {
     setScrollBehavior('')
   },[allMessages]);
 
+  useEffect(() => {
+      if(ws.readyState === 1){
+        ws.send(JSON.stringify({ viewedUser: fromUserId, sentUser: toUser._id, type: "markSeen"}));
+      }
+  },[fromUserId, toUser, ws])
   return (
     <div className={styles.wrapper} style={style}>
       <div className={styles.container} id='chat-body' style={{ scrollBehavior }}>
         <div className={styles.header}>
             <ProfilePicture borderWidth='0'/>
             <div className={styles["username-online"]}>
+              { isOnline ? 
                 <div className={styles.online}> 
                     online
-                </div>
+                </div> : 
+                <div className={styles["not-online"]}> 
+                  not-online
+                </div>}
                 <UsernameText username={toUser?.username}/>
             </div>
             <div className={styles["close-chat"]} onClick={onExit}>
@@ -95,8 +119,8 @@ function Chat({online, valueChat, onExit, toUser, ws}) {
         <div className={styles.body}>
           {
             allMessages.map((msg) => {
-              const { content, mood, sendAt, from, to, _id} = msg;
-              return <Message key={_id} content={content} mood={mood} sendAt={sendAt} from={from} to={to._id} fill={from._id === fromUserId} />
+              const { content, mood, sendAt, from, to, _id, seen} = msg;
+              return <Message key={_id} content={content} mood={mood} sendAt={sendAt} from={from} to={to._id} fill={from._id === fromUserId} seen={seen}/>
             })
           }
         </div>

@@ -3,7 +3,7 @@ import styles from './MessagesOutlook.module.css'
 import ProfilePicture from '../ProfilePicture/ProfilePicture';
 import UsernameText from '../UsernameText/UsernameText';
 function MessagesOutlook({imageSrc, username, message, notificationCount, setValueChat, onClick, bold}) {
-    bold = false;
+
     imageSrc = imageSrc ?? '';
     username = username ?? 'username';
     message = message ?? 'messages this jl sljf s ljd fdlfjd dljf dfj dfdjfdf jdfjdf jd qlj dfj dfkjdf djfjd fdjfhd jdfd jdfjdhf kdfh kfhk kdfjkhdfj dkjfhkjdhf dkfkjd mjdh kdhf h dfkh dkhdf kdhf dkfhdf dfihf ddkfhdf ';

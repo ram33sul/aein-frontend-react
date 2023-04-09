@@ -8,16 +8,18 @@ import Loading from "../../general/Loading/Loading";
 import { useSearchParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUserLogout } from "../../../redux/user/userActions";
+import { changeToDark, changeToLight } from "../../../redux/theme/themeActions";
 
 function Profile() {
 
     const dispatch = useDispatch();
+    const theme = useSelector((state) => state.theme);
     const [ params ] = useSearchParams();
     const username = params.get("username");
     const email = params.get("email");
     const [ pageLoading, setPageLoading ] = useState(true);
     const [ user, setUser ] = useState({});
-    const loggedInUser = useSelector((state) => state.user.username);
+    const loggedInUser = useSelector((state) => state.user.user.username);
     const [ moreOptions, setMoreOptions ] = useState(false);
 
     const handleLogout = () => {
@@ -26,6 +28,14 @@ function Profile() {
         }).catch((error) => {
             console.log(error);
         })
+    }
+
+    const handleChangeTheme = () => {
+        if(theme.theme === 'light'){
+            dispatch(changeToDark());
+        } else {
+            dispatch(changeToLight());
+        }
     }
 
     useEffect(() => {
@@ -95,6 +105,9 @@ function Profile() {
                             <div className={styles["more-options"]} onBlur={() => setMoreOptions(false)}>
                                 <div className={styles["more-options-option"]} onClick={handleLogout}>
                                     Logout
+                                </div>
+                                <div className={styles["more-options-option"]} onClick={handleChangeTheme}>
+                                    Change theme
                                 </div>
                                 {/* <div className={styles["more-options-option"]}>
                                     Change color mode

@@ -69,6 +69,7 @@
 
 .header-button:active {
     transform: scale(1.1);
+    opacity: 1;
 }
 
 .header-middle {
@@ -118,7 +119,7 @@
     border: 1px solid rgba(128, 128, 128, 0.5);
     width: fit-content;
     box-shadow: 0 0 5px rgba(128, 128, 128, 0.5);
-    border-radius: 10px;
+    border-radius: 5px;
     overflow: hidden;
 }
 
@@ -130,7 +131,8 @@
     width: 100%;
     text-align: center;
     cursor: pointer;
-    transition: var(--transition) opacity 0.2s;
+    transition: var(--transition), opacity 0.2s;
+    color: var(--foreground-color);
 }
 
 .more-options-option:nth-child(1){

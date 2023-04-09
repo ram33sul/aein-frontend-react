@@ -1,17 +1,16 @@
 import React from 'react'
 import style from './Logo.module.css'
+import { useDispatch, useSelector } from 'react-redux';
+import { changeToDark, changeToLight } from '../../../redux/theme/themeActions';
 function Logo({width, height}) {
 
+    const dispath = useDispatch();
+    const theme = useSelector((state) => state.theme);
     const changeMode = () => {
-        const mode = JSON.parse(localStorage.getItem('aein-app-mode'));
-        if(mode){
-            document.documentElement.style.setProperty('--background-color','white');
-            document.documentElement.style.setProperty('--foreground-color','black');
-            localStorage.setItem('aein-app-mode',JSON.stringify(false));
+        if(theme.theme === 'light'){
+            dispath(changeToDark());
         } else {
-            document.documentElement.style.setProperty('--background-color','black');
-            document.documentElement.style.setProperty('--foreground-color','white');
-            localStorage.setItem('aein-app-mode',JSON.stringify(true));
+            dispath(changeToLight());
         }
     }
   return (
