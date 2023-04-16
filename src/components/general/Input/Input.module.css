@@ -3,6 +3,7 @@
     display: flex;
     justify-content: center;
     height: 40px;
+    min-height: 40px;
     align-items: flex-end;
 }
 
@@ -12,9 +13,9 @@
     left: 50%;
     transform: translateX(-50%);
     font-size: 17px;
-    font-weight: bold;
+    font-weight: normal;
     z-index: 0;
-    transition: all 0.2s;
+    transition: var(--transition), top 0.2s, left 0.2s, transform 0.2s, font-size 0.2s, opacity 0.2s;
     opacity: 0.5;
     white-space: nowrap;
     color: var(--foreground-color);
@@ -44,7 +45,6 @@
     left: 5px;
     transform: translateX(0);
     font-size: 14px;
-    font-weight: normal;
     opacity: 1;
 }
 

@@ -1,10 +1,10 @@
 import { combineReducers } from "redux";
 import userReducer from "./user/userReducer";
-import themeReducer from "./theme/themeReducer";
+import wsReducer from "./webSocket/wsReducer";
 
 const rootReducer = combineReducers({
     user: userReducer,
-    theme: themeReducer
+    webSocket: wsReducer
 })
 
 export default rootReducer;

@@ -1,36 +1,38 @@
 import React, { useEffect, useState } from 'react'
 import styles from './Explore.module.css'
 import Search from '../../general/Search/Search';
-import Button3 from '../../general/Button3/Button3';
 import Post from '../../general/Post/Post';
 import axios from 'axios';
 import Loading from '../../general/Loading/Loading';
 import UserOverlook from '../../general/UserOverlook/UserOverlook';
+import { useSelector } from 'react-redux';
+import FilterIcon from '../../icons/FilterIcon/FilterIcon';
 function Explore() {
 
     const [ searchInput, setSearchInput ] = useState('');
     const [ searchResult, setSearchResult ] = useState([]);
     const [ searchLoading, setSearchLoading ] = useState(false);
+    const user = useSelector((state) => state.user.user);
 
     useEffect(() => {
         if(searchInput){
             setSearchLoading(true);
-            axios.get(`/usersList?keyword=${searchInput}`).then((response) => {
-                setSearchResult(response.data.users);
+            axios.get(`/user/usersList?keyword=${searchInput}`).then((response) => {
+                setSearchResult(response.data.users.filter((data) => data._id !== user._id));
             }).catch((error) => {
                 console.log(error);
             }).finally(()=>{
                 setSearchLoading(false);
             })
         }
-    },[searchInput])
+    },[searchInput, user])
 
   return (
     <div className={styles.container}>
         <div className={styles.header}>
             <div className={styles['search-and-buttons']}>
             <Search placeholder='Search Users...' onChange={(e) => setSearchInput(e.target.value)} value={searchInput}/>
-            <Button3 />
+            <FilterIcon size='40px' />
             </div>
         </div>
         { searchInput.length === 0 ? 

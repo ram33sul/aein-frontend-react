@@ -41,7 +41,7 @@ function Login() {
             return setErrorMessage('All inputs are required');
         }
         setButtonLoading(true);
-        axios.post('/login', {usernameOrEmail, password}).then((response) => {
+        axios.post('/user/login', {usernameOrEmail, password}).then((response) => {
             dispatch(fetchUserSuccess(response.data.user));
         }).catch((error) => {
             dispatch(fetchUserFailure(error.response.data));
@@ -52,7 +52,7 @@ function Login() {
     }
 
     const handleGoogleLogin = useCallback((response) => {
-        axios.post('/googleLogin', {googleToken: response.credential}).then((response) => {
+        axios.post('/user/googleLogin', {googleToken: response.credential}).then((response) => {
             dispatch(fetchUserSuccess(response.data.user));
         }).catch((error) => {
             dispatch(fetchUserFailure(error.response.data.message));
@@ -66,7 +66,7 @@ function Login() {
             return setErrorMessage("Mobile is required!")
         }
         setButtonLoading(true);
-        axios.post('/sendSmsOtp', {mobile: mobileInput}).then((response) => {
+        axios.post('/user/sendSmsOtp', {mobile: mobileInput}).then((response) => {
             setVerifyOtpPage(response.data.message);
         }).catch((error) =>{
             setErrorMessage(error.response.data.message);
@@ -82,7 +82,7 @@ function Login() {
         }
         setButtonLoading(true);
         if(loginWithOtpPage){
-            axios.post('/verifySmsOtp', {mobile: mobileInput, otpCode}).then((response) => {
+            axios.post('/user/verifySmsOtp', {mobile: mobileInput, otpCode}).then((response) => {
                 dispatch(fetchUserSuccess(response.data.user));
             }).catch((error) => {
                 setErrorMessage(error.response.data.message);
@@ -90,7 +90,7 @@ function Login() {
                 setButtonLoading(false);
             })
         } else if(forgotPasswordPage){
-            axios.post('/verifySmsOtp', {mobile: mobileInput, otpCode, login: false}).then((response) => {
+            axios.post('/user/verifySmsOtp', {mobile: mobileInput, otpCode, login: false}).then((response) => {
                 setUserData(response.data.user);
                 setChangePasswordPage(true);
             }).catch((error) => {
@@ -109,7 +109,7 @@ function Login() {
         }
         if(!validatePassword(passwordInput)) { setErrorMessage('Password is not valid')};
         setButtonLoading(true);
-        axios.patch("/changePassword", {userId: userData._id, newPassword: passwordInput}).then((response) => {
+        axios.patch("/user/changePassword", {userId: userData._id, newPassword: passwordInput}).then((response) => {
             dispatch(fetchUserSuccess(response.data.user));
         }).catch((error) => {
             setErrorMessage(error.response.data.message);
@@ -153,32 +153,32 @@ function Login() {
         <span className={styles["error-message"]}>{errorMessage}</span>
         { changePasswordPage ?
         <>
-            <Input label='New Password' value={passwordInput} setValue={setPasswordInput} type='password'/>
-            <Input label='Confirm New Password' value={confirmPasswordInput} setValue={setConfirmPasswordInput} type='password'/>
+            <Input label='New Password' value={passwordInput} onChange={(e) => setPasswordInput(e.target.value)} type='password'/>
+            <Input label='Confirm New Password' value={confirmPasswordInput} onChange={(e) => setConfirmPasswordInput(e.target.value)} type='password'/>
             <Button width='100%' maxWidth='300px' content='Change Password' onClick={handleChangepassword} loading={buttonLoading}/>
             <span className={styles.span} onClick={handleGoBack}>Go back</span>
         </> : verifyOtpPage ? 
         <>
             <span className={styles.span} style={{fontWeight: 'bold'}}>{verifyOtpPage}</span>
-            <Input label='OTP code' value={otpCode} setValue={setOtpCode} />
+            <Input label='OTP code' value={otpCode} onChange={(e) => setOtpCode(e.target.value)} />
             <Button width='100%' maxWidth='300px' content='Verify OTP' onClick={handleVerifyOtp} loading={buttonLoading}/>
             <span className={styles.span} onClick={handleGoBack}>Go back</span>
         </> : loginWithOtpPage ? 
         <>
-            <Input label='Mobile Number' value={mobileInput} setValue={setMobileInput} />
+            <Input label='Mobile Number' value={mobileInput} onChange={(e) => setMobileInput(e.target.value)} />
             <Button width='100%' maxWidth='300px' content='Send OTP' onClick={handleSendOtp} loading={buttonLoading}/>
             <span className={styles.span} onClick={handleGoBack}>Go back</span>
 
         </>  : forgotPasswordPage ?
         <>
-            <Input label='Mobile Number' value={mobileInput} setValue={setMobileInput} />
+            <Input label='Mobile Number' value={mobileInput} onChange={(e) => setMobileInput(e.target.value)} />
             <Button width='100%' maxWidth='300px' content='Send OTP' onClick={handleSendOtp} loading={buttonLoading}/>
             <span className={styles.span} onClick={handleGoBack}>Go back</span>
 
         </> :
         <>
-            <Input label='Username or Email' value={usernameOrEmail} setValue={setUsernameOrEmail} />
-            <Input label='Password' value={password} setValue={setPassword} type='password'/>
+            <Input label='Username or Email' value={usernameOrEmail} onChange={(e) => setUsernameOrEmail(e.target.value)} />
+            <Input label='Password' value={password} onChange={(e) => setPassword(e.target.value)} type='password'/>
             <Button width='100%' maxWidth='300px' content='Login' onClick={handleSubmit} loading={buttonLoading}/>
             <span className={styles.span} onClick={() => setForgotPasswordPage(true)}>Forgot Password?</span>
             <Line width='100%' maxWidth='300px' />

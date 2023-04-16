@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import styles from './Home.module.css'
 import Navbar from '../../components/fragments/Navbar/Navbar'
 import Messages from '../../components/fragments/Messages/Messages'
@@ -7,9 +7,22 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 import Profile from '../../components/fragments/Profile/Profile'
 import Explore from '../../components/fragments/Explore/Explore'
 import useMediaQuery from '../../customHooks/mediaQuery'
+import { useDispatch, useSelector } from 'react-redux'
+import { wsConnect } from '../../redux/webSocket/wsActions'
+import EditProfile from '../../components/fragments/EditProfile/EditProfile'
 function Home() {
 
-    const isWidth = useMediaQuery('(min-width: 650px)');
+    const [ isWidth, setIsWidth ] = useState('loading');
+    const mediaQuery = useMediaQuery('(min-width: 650px)');
+    const state = useSelector((state) => state);
+    const user = state.user.user;
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        dispatch(wsConnect(user._id));
+        setIsWidth(mediaQuery);
+    },[dispatch, user, mediaQuery])
+
 
   return (
     <div className={styles.container}>
@@ -17,7 +30,8 @@ function Home() {
             <Route path='' element={<><Navbar active='feed' /> <Feed /></>} />
             <Route path='profile' element={<> <Navbar active='profile' /> <Profile /></>} />
             <Route path='explore' element={<> <Navbar active='explore' /> <Explore /></>} />
-            <Route path='messages' element= { isWidth ? <Navigate to="feed" /> : <> <Navbar active='messages' /> <Messages /></>} />
+            <Route path='messages' element= { isWidth ? <Navigate to="/" /> : <> <Navbar active='messages' /> <Messages/></>} />
+            <Route path='editProfile' element={<> <Navbar active='profile' /> <EditProfile /></>} />
             <Route path='*' element={<><Navigate to="/" /></>} />
         </Routes>
         { isWidth ? <Messages/> : ''}

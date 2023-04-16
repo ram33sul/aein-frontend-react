@@ -1,14 +1,13 @@
 import React from 'react'
 import styles from './ButtonPost.module.css'
-import { useSelector } from 'react-redux';
 function ButtonPost({type, action, size, count}) {
 
     type = type === 'like' ? 'heart' : type;
     type = type || 'heart';
     size = size || '40px';
     count = count || 0;
-    const theme = useSelector((state) => state.theme);
-    const imageSrc = `/icons/${theme.foregroundColor}/${type}-icon-${theme.foregroundColor}.png`;
+    const foregroundColor = getComputedStyle(document.body).getPropertyValue('--foreground-color').trim();
+    const imageSrc = `/icons/${foregroundColor}/${type}-icon-${foregroundColor}.png`;
 
   return (
     <div className={styles.container}>

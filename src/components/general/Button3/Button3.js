@@ -1,16 +1,15 @@
 import React from 'react'
 import styles from './Button3.module.css'
 import Loading from '../Loading/Loading';
-import { useSelector } from 'react-redux';
 function Button3({fill, imageType, size, onClick, loading}) {
 
-    const theme = useSelector((state) => state.theme);
     imageType = imageType ?? 'filter'
     size = size ?? '40px';
-    const backgroundColor = fill ? theme.foregroundColor : theme.backgroundColor;
-    const color = fill ? theme.backgroundColor : theme.foregroundColor;
+    const backgroundColor = fill ? 'var(--foreground-color)' : 'var(--background-color)';
+    const color = fill ? 'var(--background-color)' : 'var(--foreground-color)';
 
-    let imageSrc = `./icons/${color}/${imageType}-icon-${color}.png`;
+    const foregroundColor = getComputedStyle(document.body).getPropertyValue('--foreground-color').trim();
+    let imageSrc = `./icons/${fill ? foregroundColor : foregroundColor}/${imageType}-icon-${fill ? foregroundColor : foregroundColor}.png`;
 
     onClick = (loading || !onClick) ? (() => {}) : onClick;
 

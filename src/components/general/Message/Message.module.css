@@ -6,7 +6,7 @@
     align-items: flex-end;
     border: 1px solid transparent;
     padding: 1px;
-    transition: var(--transition), opacity 0.2s, border 0.2s;
+    transition: var(--transition), opacity 0s, border 0s;
     border-radius: 20px;
 }
 

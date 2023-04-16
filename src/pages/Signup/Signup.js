@@ -10,7 +10,7 @@ import { validateEmail, validateMobile, validateName, validatePassword, validate
 import { updateEmail, updateName, updateUsername, updateMobile, updatePassword, updateConfirmPassword } from '../../validations/updations'
 import Logo from '../../components/general/Logo/Logo';
 import { useDispatch } from 'react-redux';
-import { fetchUserFailure, fetchUserRequest, fetchUserSuccess } from '../../redux/user/userActions';
+import { fetchUserSuccess } from '../../redux/user/userActions';
 
 function Signup() {
     
@@ -35,24 +35,43 @@ function Signup() {
     const dispatch = useDispatch();
 
     const handleSubmit = () => {
-        if(!validateName(name)) { setNameError('Name is not valid') };
-        if(!validateUsername(username)) { setUsernameError('Username is not valid')};
-        if(!validateEmail(email)) { setEmailError('Email is not valid')};
-        if(!validateMobile(mobile)) { setMobileError('Mobile is not valid')};
-        if(!validatePassword(password)) { setPasswordError('Password is not valid')};
+        if(!name){
+            setNameError('Name is required!');
+        }
+        if(!username){
+            setUsernameError('Username is required!');
+        }
+        if(!email){
+            setEmailError('Email is required!');
+        }
+        if(!mobile){
+            setMobileError('Mobile is required!');
+        }
+        if(!password){
+            setPasswordError('Password is required!');
+        }
+        if(!confirmPassword){
+            setConfirmPasswordError('Confirm password is required!');
+        }
+        if(!name || !username || !email || !mobile || !password || !confirmPassword){
+            return;
+        }
+        let errorFlag = 0;
+        if(!validateName(name)) {errorFlag = 1; setNameError('Name is not valid') };
+        if(!validateUsername(username)) {errorFlag = 1; setUsernameError('Username is not valid')};
+        if(!validateEmail(email)) {errorFlag = 1; setEmailError('Email is not valid')};
+        if(!validateMobile(mobile)) {errorFlag = 1; setMobileError('Mobile is not valid')};
+        if(!validatePassword(password)) {errorFlag = 1; setPasswordError('Make password stronger!')};
         if(password !== confirmPassword){
-            setConfirmPasswordError("Password doesn't match");
+            setConfirmPasswordError("Passwords doesn't match");
             return;
         }
-        if(nameError || usernameError || emailError || mobileError || passwordError || confirmPasswordError){
+        if(errorFlag){
             return;
         }
-        dispatch(fetchUserRequest())
-        axios.post('/signup', {name, username, email, mobile, password}).then((response) => {
+        axios.post('/user/signup', {name, username, email, mobile, password}).then((response) => {
             dispatch(fetchUserSuccess(response.data.user));
-            console.log(response.data.user);
         }).catch((error) => {
-            console.log(error);
             error.response.data.forEach((error) => {
                 if(error.field === 'name') { setNameError(error.message)};
                 if(error.field === 'username') { setUsernameError(error.message)};
@@ -60,7 +79,6 @@ function Signup() {
                 if(error.field === 'mobile') { setMobileError(error.message)};
                 if(error.field === 'password') { setPasswordError(error.message)};
             })
-            dispatch(fetchUserFailure(error.response.data));
         })
     }
 
@@ -68,12 +86,12 @@ function Signup() {
   return (
     <div className={styles.container}>
         <Logo />
-        <Input label='Name' setValue={updateName(setName, setNameError)} value={name} error={nameError} />
-        <Input label='Username' setValue={updateUsername(setUsername, setUsernameError)} value={username} error={usernameError} />
-        <Input label='Email' setValue={updateEmail(setEmail, setEmailError)} value={email} error={emailError} />
-        <Input label='Mobile' setValue={updateMobile(setMobile, setMobileError)} value={mobile} error={mobileError} />
-        <Input label='Password' type='password' setValue={updatePassword(setPassword, setPasswordError)} value={password} error={passwordError}/>
-        <Input label='Confirm Password' type='password'setValue={updateConfirmPassword(setConfirmPassword, setConfirmPasswordError)} value={confirmPassword} error={confirmPasswordError} />
+        <Input label='Name' onChange={(e) => updateName(setName, setNameError)(e.target.value)} value={name} error={nameError} />
+        <Input label='Username' onChange={(e) => updateUsername(setUsername, setUsernameError)(e.target.value)} value={username} error={usernameError} />
+        <Input label='Email' onChange={(e) => updateEmail(setEmail, setEmailError)(e.target.value)} value={email} error={emailError} />
+        <Input label='Mobile' onChange={(e) => updateMobile(setMobile, setMobileError)(e.target.value)} value={mobile} error={mobileError} />
+        <Input label='Password' type='password' onChange={(e) => updatePassword(setPassword, setPasswordError)(e.target.value)} value={password} error={passwordError}/>
+        <Input label='Confirm Password' type='password' onChange={(e) => updateConfirmPassword(setConfirmPassword, setConfirmPasswordError)(e.target.value)} value={confirmPassword} error={confirmPasswordError} />
         <Button width='100%' maxWidth='300px' content='Signup' onClick={handleSubmit} />
         <span className={styles.span} onClick={() => navigate('/login')}>Already have an account?</span>
     </div>

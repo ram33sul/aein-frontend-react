@@ -5,13 +5,9 @@
     border: 1px solid;
     border-radius: 10px;
     cursor: pointer;
-    transition: var(--transition), opacity 0.2s, transform 0.2s;
-}
-
-.container:hover {
-    opacity: 0.5;
+    transition: var(--transition), opacity 0.2s, background-color 0.2s;
 }
 
 .container:active {
-    transform: scale(1.1);
+    opacity: 0.5;
 }

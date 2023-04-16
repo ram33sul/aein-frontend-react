@@ -1,10 +1,10 @@
 import React from 'react';
 import styles from './Feed.module.css';
 import Search from '../../general/Search/Search';
-import Button3 from '../../general/Button3/Button3';
 import Status from '../../general/Status/Status';
 import Post from '../../general/Post/Post';
 import Line from '../../general/Line/Line';
+import FilterIcon from '../../icons/FilterIcon/FilterIcon';
 
 function Feed() {
   return (
@@ -12,7 +12,7 @@ function Feed() {
         <div className={styles.header}>
         <div className={styles['search-and-buttons']}>
             <Search placeholder='Search feed...' />
-            <Button3 />
+            <FilterIcon size='40px' />
         </div>
         <Status />
         <div className={styles.line}>

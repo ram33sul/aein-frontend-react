@@ -13,7 +13,6 @@ export const validateName = (name) => {
 
 export const validateUsername = (username) => {
     const validValue = /^[A-Za-z0-9]*$/;
-    console.log("username: "+exists(username));
     return exists(username) && validValue.test(username) && username.length < 16 && username.length > 3;
     // username must exist
     // username must be aplhanumeric without spaces
@@ -36,4 +35,8 @@ export const validateEmail = (email) => {
     const validValue = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
     return exists(email) && validValue.test(email);
     // email must exist and should be valid
+}
+
+export const validateBio = (bio) => {
+    return (bio.length < 101 && bio.split(/\r\n|\r|\n/).length < 6);
 }

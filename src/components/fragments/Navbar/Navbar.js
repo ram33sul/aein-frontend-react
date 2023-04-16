@@ -10,7 +10,6 @@ import { useNavigate } from 'react-router-dom'
 
 function Navbar({active}) {
 
-    const theme = useSelector((state) => state.theme);
     
     const params = new URLSearchParams(window.location.search);
 
@@ -23,7 +22,6 @@ function Navbar({active}) {
     const isMessage = useMediaQuery('(max-width: 650px)');
     const icon = isMessage ? 'Messages' : 'Settings'
     const iconActive = icon === 'settings' ? settings : messages;
-    const src = `./icons/${theme.foregroundColor}/${icon === 'Messages' ? 'Aein' : 'settings'}-icon-${theme.foregroundColor}.png`;
 
     const username = useSelector((state) => state.user.user.username);
 
@@ -37,10 +35,10 @@ function Navbar({active}) {
                 <Logo width='70px' />
             </div>
             <div className={styles['buttons-container']}>
-                <Navicon src={`./icons/${theme.foregroundColor}/feed-icon-${theme.foregroundColor}.png`} alt='feed-icon' label='Feed' active={feed} onClick={() => navigate('/')}/>
-                <Navicon src={`./icons/${theme.foregroundColor}/explore-icon-${theme.foregroundColor}.png`} alt='feed-icon' label='Explore' active={explore} onClick={() => navigate('/explore')}/>
-                <Navicon src={`./icons/${theme.foregroundColor}/Aein-icon-${theme.foregroundColor}.png`} alt='feed-icon' label='Notifications' active={notifications} onClick={() => navigate('/notifications')}/>
-                <Navicon src={src} alt='feed-icon' label={icon} active={iconActive} onClick={() => navigate(`/${icon.toLowerCase()}`)}/>
+                <Navicon icon='feed' label='Feed' active={feed} onClick={() => navigate('/')}/>
+                <Navicon icon='explore' label='Explore' active={explore} onClick={() => navigate('/explore')}/>
+                <Navicon icon='notifications' label='Notifications' active={notifications} onClick={() => navigate('/notifications')}/>
+                <Navicon icon={icon.toLowerCase()} label={icon} active={iconActive} onClick={() => navigate(`/${icon.toLowerCase()}`)}/>
             </div>
             <div className={styles.profileWrap} onClick={() => navigate(`/profile?username=${username}`)}>
                 <ProfilePicture size='40px' borderWidth='0'/>

@@ -22,11 +22,11 @@
     gap: 10px;
     align-items: flex-end;
     position: sticky;
-    padding-top: 10px;
     padding-bottom: 10px;
     margin-top: -8px;
     top: -8px;
     z-index: 9;
+    height: 80px;
 }
 
 .close-chat {
@@ -92,6 +92,7 @@
     padding: 5px;
     outline: 0;
     font-size: 15px;
+    color: var(--foreground-color);
 }
 
 .mood-container {
@@ -100,5 +101,33 @@
     width: 22.5vw;
     min-width: 100%;
     overflow: scroll;
-};
+}
 
+.header-button-container {
+    width: 100%;
+    display: flex;
+    height: 70%;
+    justify-content: space-around;
+    gap: 1px;
+    align-items: center;
+    background-color: transparent;
+}
+.header-button {
+    background-color: var(--foreground-color);
+    color: var(--background-color);
+    padding: 2px 10px 2px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: var(--transition), opacity 0.2s;
+}
+
+.header-button:active {
+    opacity: 0.5;
+}
+.header-button:nth-child(2){
+    background-color: green;
+}
+
+.header-button:nth-child(3){
+    background-color: red;
+}

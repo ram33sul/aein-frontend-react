@@ -6,7 +6,7 @@ import {
 } from './userTypes';
 
 const initialState = {
-    loading: false,
+    loading: true,
     user: {},
     error: ''
 }

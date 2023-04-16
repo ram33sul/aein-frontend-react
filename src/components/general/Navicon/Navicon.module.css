@@ -1,13 +1,12 @@
 .container {
     width: fit-content;
     display: flex;
-    gap: 5px;
+    gap: 20px;
     align-items: center;
     justify-content: space-between;
-    min-width: fit-content;
     opacity: 0.5;
     cursor: pointer;
-    transition: var(--transition), opacity 0.2s, transform 0.2s;
+    transition: var(--transition), opacity 0.2s;
 }
 
 .label {
@@ -21,7 +20,7 @@
 }
 
 .container:active {
-    transform: scale(1.1);
+    opacity: 0.5;
 }
 
 @media screen and (max-width: 1000px) {

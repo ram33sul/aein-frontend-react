@@ -5,25 +5,30 @@ import UsernameText from "../../general/UsernameText/UsernameText";
 import Post from "../../general/Post/Post";
 import axios from "axios";
 import Loading from "../../general/Loading/Loading";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUserLogout } from "../../../redux/user/userActions";
-import { changeToDark, changeToLight } from "../../../redux/theme/themeActions";
+import { wsDisconnect } from "../../../redux/webSocket/wsActions";
+import MoreOptionIcon from "../../icons/MoreOptionIcon/MoreOptionIcon";
 
 function Profile() {
 
     const dispatch = useDispatch();
-    const theme = useSelector((state) => state.theme);
+    const state = useSelector((state) => state);
+    const ws = state.webSocket.ws;
     const [ params ] = useSearchParams();
     const username = params.get("username");
     const email = params.get("email");
     const [ pageLoading, setPageLoading ] = useState(true);
     const [ user, setUser ] = useState({});
-    const loggedInUser = useSelector((state) => state.user.user.username);
+    const loggedInUser = state.user.user.username;
     const [ moreOptions, setMoreOptions ] = useState(false);
+    const navigate = useNavigate();
 
     const handleLogout = () => {
-        axios.get('/logout').then((response) => {
+        axios.get('/user/logout').then((response) => {
+            ws.close();
+            dispatch(wsDisconnect());
             dispatch(fetchUserLogout());
         }).catch((error) => {
             console.log(error);
@@ -31,15 +36,20 @@ function Profile() {
     }
 
     const handleChangeTheme = () => {
-        if(theme.theme === 'light'){
-            dispatch(changeToDark());
+        const theme = JSON.parse(localStorage.getItem("aein-app-theme"));
+        if(theme === 'dark'){
+            document.documentElement.style.setProperty('--background-color','white');
+            document.documentElement.style.setProperty('--foreground-color','black');
+            localStorage.setItem("aein-app-theme", JSON.stringify("light"));
         } else {
-            dispatch(changeToLight());
+            document.documentElement.style.setProperty('--background-color','black');
+            document.documentElement.style.setProperty('--foreground-color','white');
+            localStorage.setItem("aein-app-theme", JSON.stringify("dark"));
         }
     }
 
     useEffect(() => {
-        axios.get(`/userDetails?username=${username}&email=${email}`).then((response) => {
+        axios.get(`/user/userDetails?username=${username}&email=${email}`).then((response) => {
             setUser(response.data);
         }).catch((error) => {
             console.log(error);
@@ -67,7 +77,7 @@ function Profile() {
                         </div>
                     </div>
                     { user.username === loggedInUser ?
-                        <div className={styles["header-button"]}>
+                        <div className={styles["header-button"]} onClick={() => navigate('/editProfile')}>
                             Edit profile
                         </div> :
                         <div className={styles["header-button"]} style={{backgroundColor: 'var(--gold-color)', color: 'var(--background-color)', borderColor: 'var(--gold-color)'}}>
@@ -100,7 +110,7 @@ function Profile() {
                         {user.name ?? 'loading'}
                     </div>
                     <div className={styles["more-options-button"]}>
-                        <img src="/icons/black/moreoptions-icon-black.png" alt="---" className={styles["more-options-image"]} onClick={() => setMoreOptions(!moreOptions)}/>
+                        <MoreOptionIcon onClick={() => setMoreOptions(!moreOptions)} onBlur={() => setMoreOptions(!moreOptions)}/>
                         { moreOptions ? user.username === loggedInUser ? 
                             <div className={styles["more-options"]} onBlur={() => setMoreOptions(false)}>
                                 <div className={styles["more-options-option"]} onClick={handleLogout}>
@@ -125,8 +135,7 @@ function Profile() {
                     </div>
                 </div>
                 <div className={styles["bio-text"]}>
-                    Professional soccer player <br />
-                    From portugal
+                    {user.bio.length ? user.bio : <span style={{opacity: '0.5', transition: 'var(--transition),color 0s'}}>no bio yet...</span>}
                 </div>
             </div>
             <div className={styles.body}>

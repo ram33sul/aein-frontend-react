@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './MoodButton.module.css';
 
-function MoodButton({ name, color, fill }) {
+function MoodButton({ name, color, fill, onClick }) {
 
     name = name ?? 'name';
     color = color ?? 'green';
@@ -12,7 +12,7 @@ function MoodButton({ name, color, fill }) {
     color = fill ? 'white' : color;
 
   return (
-    <div className={styles.container} style={{ color, borderColor, backgroundColor }}>
+    <div className={styles.container} style={{ color, borderColor, backgroundColor }} onClick={onClick}>
         { name }
     </div>
   )

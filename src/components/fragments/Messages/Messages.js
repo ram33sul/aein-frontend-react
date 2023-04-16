@@ -13,17 +13,20 @@ function Messages() {
     const [ searchUsers, setSearchUsers ] = useState([]);
     const [ searchInput, setSearchInput ] = useState('');
     const [ overallMessages, setOverallMessages ] = useState([]);
-    const user = useSelector((state) => state.user.user)
+    const state = useSelector((state) => state)
+    const user = state.user.user;
+    const ws = state.webSocket.ws;
     const fromUserId = user?._id;
-    const [ ws, setWs ] = useState({})
+    // const [ ws, setWs ] = useState({})
 
     const handleSearchInput = (e) => {
         setSearchInput(e.target.value);
     }
 
-    useEffect(() => {
-        setWs(new WebSocket('ws://localhost:5001?userId='+fromUserId))
-    },[fromUserId])
+    // useEffect(() => {
+    //     setWs(new WebSocket('ws://localhost:5001?userId='+fromUserId))
+    // },[fromUserId])
+
 
     ws.onopen = () => {
         ws.send(JSON.stringify({userId: fromUserId, type: "getOverallMessages"}));
@@ -45,15 +48,15 @@ function Messages() {
         setSearchUsers([]);
         if(searchInput.length !== 0){
             setSearchLoading(true);
-            axios.get(`/usersList?keyword=${searchInput}`).then((response) => {
-                setSearchUsers(response.data.users);
+            axios.get(`/user/usersList?keyword=${searchInput}`).then((response) => {
+                setSearchUsers(response.data.users.filter((user) => user._id !== fromUserId));
             }).catch((error) => {
                 console.log(error.response.data.messages);
             }).finally(() => {
                 setSearchLoading(false);
             })
         }
-    },[searchInput]);
+    },[searchInput, fromUserId]);
 
     useEffect(() => {
         if(searchInput.length === 0){
@@ -69,7 +72,7 @@ function Messages() {
   return (
     <div className={styles.wrapper}>
         <div className={styles.container}>
-            { chat ? <Chat onExit={() => setChat(null)} toUser={chat} ws={ws}/> : <>
+            { chat ? <Chat onExit={() => setChat(null)} toUser={chat}/> : <>
             <div className={styles.header}>
                 <Search value={searchInput} onChange={handleSearchInput}/>
             </div>
