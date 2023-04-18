@@ -11,12 +11,12 @@ function Message({content, mood, fill, seen, sendAt, onClick, active}) {
     const borderBottomLeftRadius = fill ? '' : '0';
     const borderBottomRightRadius = fill ? '0' : '';
     const flexDirection = fill ? 'row-reverse' : 'row';
-    sendAt = new Date(sendAt).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+    sendAt = sendAt ? new Date(sendAt).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '' ;
 
 
 
   return (
-    <div className={styles.wrapper} style={{flexDirection, marginLeft, border: active ? '1px solid rgba(128,128,128,0.7)' : '', opacity: active ? 0.3 : '', borderBottomLeftRadius, borderBottomRightRadius}}>
+    <div className={styles.wrapper} style={{flexDirection, marginLeft, border: active ? '1px solid rgba(128,128,128,0.7)' : '', opacity: active ? 0.3 : '', backgroundColor: active ? 'rgba(128,128,128,0.5)' : '',borderBottomLeftRadius, borderBottomRightRadius}}>
         <div onClick={onClick} className={styles.container} style={{ backgroundColor, color, borderBottomLeftRadius, borderBottomRightRadius, borderColor }}>
             {content}
         </div>
@@ -25,9 +25,9 @@ function Message({content, mood, fill, seen, sendAt, onClick, active}) {
             <div className={styles.seen}>
                 seen
             </div> : ''}
-            { sendAt && fill?             <div className={styles.time}>
+            <div className={styles.time}>
                 {sendAt}
-            </div> : ''}
+            </div>
         </div>
     </div>
   )

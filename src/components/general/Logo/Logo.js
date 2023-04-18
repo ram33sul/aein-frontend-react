@@ -1,18 +1,10 @@
 import React from 'react'
 import style from './Logo.module.css'
+import { changeTheme } from '../../../services/services'
 function Logo({width, height}) {
 
     const changeMode = () => {
-        const theme = JSON.parse(localStorage.getItem("aein-app-theme"));
-        if(theme === 'dark'){
-            document.documentElement.style.setProperty('--background-color','white');
-            document.documentElement.style.setProperty('--foreground-color','black');
-            localStorage.setItem("aein-app-theme", JSON.stringify("light"));
-        } else {
-            document.documentElement.style.setProperty('--background-color','black');
-            document.documentElement.style.setProperty('--foreground-color','white');
-            localStorage.setItem("aein-app-theme", JSON.stringify("dark"));
-        }
+        changeTheme()
     }
   return (
     <div className={style.container} onClick={changeMode}>

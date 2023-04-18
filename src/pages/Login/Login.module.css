@@ -7,15 +7,22 @@
     align-items: center;
     margin-top: 50vh;
     transform: translateY(-50%);
-    border: 1px solid var(--foreground-color);
     border-radius: 10px;
     padding: 10px 10px 20px 10px;
     gap: 20px;
+    box-shadow: 0 0 10px rgba(128, 128, 128, 0.5);
 }
 
 .span {
     color: var(--foreground-color);
     cursor: pointer;
+    opacity: 0.5;
+    font-size: 14px;
+    transition: var(--transition), opacity 0.2s;
+}
+
+.span:hover {
+    opacity: 1;
 }
 
 .error-message {

@@ -17,16 +17,10 @@ function Messages() {
     const user = state.user.user;
     const ws = state.webSocket.ws;
     const fromUserId = user?._id;
-    // const [ ws, setWs ] = useState({})
 
     const handleSearchInput = (e) => {
         setSearchInput(e.target.value);
     }
-
-    // useEffect(() => {
-    //     setWs(new WebSocket('ws://localhost:5001?userId='+fromUserId))
-    // },[fromUserId])
-
 
     ws.onopen = () => {
         ws.send(JSON.stringify({userId: fromUserId, type: "getOverallMessages"}));
@@ -35,9 +29,10 @@ function Messages() {
     ws.onmessage = (response) => {
         response = JSON.parse(response.data);
         if(response.type === 'getOverallMessages'){
-            setOverallMessages(response.data);
+            console.log(response.data);
+            setOverallMessages(response.data.filter((messageData) => !user.blockedUsers.includes(messageData.foreignUser._id)));
         } else if(response.type === 'sendMessage'){
-            if(response.data.to._id === fromUserId){
+            if(response.data.to === fromUserId){
                 ws.send(JSON.stringify({userId: fromUserId, type: "getOverallMessages"}));
             }
         }
@@ -49,14 +44,14 @@ function Messages() {
         if(searchInput.length !== 0){
             setSearchLoading(true);
             axios.get(`/user/usersList?keyword=${searchInput}`).then((response) => {
-                setSearchUsers(response.data.users.filter((user) => user._id !== fromUserId));
+                setSearchUsers(response.data.users.filter((eachUser) => eachUser._id !== fromUserId && !user.blockedUsers.includes(eachUser._id)));
             }).catch((error) => {
                 console.log(error.response.data.messages);
             }).finally(() => {
                 setSearchLoading(false);
             })
         }
-    },[searchInput, fromUserId]);
+    },[searchInput, fromUserId, user]);
 
     useEffect(() => {
         if(searchInput.length === 0){
@@ -86,16 +81,7 @@ function Messages() {
                             })) :
                         'no results found') :
                     ( overallMessages.length !==0 ? (overallMessages.map((data) => {
-                        let chat;
-                        let username;
-                        if(data.from._id === fromUserId){
-                            chat = data.to;
-                            username = data.to.username;
-                        } else {
-                            chat = data.from;
-                            username = data.from.username;
-                        }
-                        return(<MessagesOutlook onClick={() => setChat(chat)} username={username} key={data.messageId} message={data.content} bold={data.newMessageCount && data.newMessageCount > 0} notificationCount={data.newMessageCount}/>)
+                        return(<MessagesOutlook onClick={() => setChat(data.foreignUser)} username={data.foreignUser.username} imageSrc={data.foreignUser.profilePicUrl} key={data.messageId} message={data.content} bold={data.newMessageCount && data.newMessageCount > 0} notificationCount={data.newMessageCount}/>)
                             })) : 'no messages yet'
                     )
             }

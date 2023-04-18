@@ -7,8 +7,11 @@ import Button3 from '../Button3/Button3'
 import MoodButton from '../MoodButton/MoodButton'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router'
+import AddPost from '../AddPost/AddPost'
+import { validatePost } from '../../../validations/validations'
+import DisplayMessage from '../DisplayMessage/DisplayMessage'
 
-function Chat({online, valueChat, onExit, toUser}) {
+function Chat({valueChat, onExit, toUser}) {
 
   const [ message, setMessage ] = useState('');
   const [ style, setStyle ] = useState({transform: 'translateX(100%)'});
@@ -18,6 +21,8 @@ function Chat({online, valueChat, onExit, toUser}) {
   const [ isOnline, setIsOnline ] = useState(false);
   const [ mood, setMood ] = useState({});
   const [ selectedMessages, setSelectedMessages ] = useState([]);
+  const [ postPage, setPostPage ] = useState(false);
+  const [ displayMessageShow, setDisplayMessageShow ] = useState({});
 
   const navigate = useNavigate();
   const state = useSelector((state) =>  state);
@@ -57,12 +62,19 @@ function Chat({online, valueChat, onExit, toUser}) {
     }
   ]
 
-  const handleMessageClick = (messageId) => {
+  const handleMessageClick = (selectedMessage) => {
     return () => {
-      if(selectedMessages.includes(messageId)){
-        return setSelectedMessages(selectedMessages.filter((message) => message !== messageId));
+      let alreadySelected = false;
+      selectedMessages.forEach((message) => {
+        if(message._id === selectedMessage._id){
+          alreadySelected = true;
+          return;
+        }
+      })
+      if(alreadySelected){
+        return setSelectedMessages(selectedMessages.filter((message) => message._id !== selectedMessage._id));
       }
-      setSelectedMessages([...selectedMessages,messageId]);
+      setSelectedMessages([...selectedMessages,selectedMessage]);
     }
   }
 
@@ -82,6 +94,14 @@ function Chat({online, valueChat, onExit, toUser}) {
     }
   }
 
+  const handlePostClick = () => {
+    const postIsValid = validatePost(selectedMessages);
+    if(!postIsValid.status){
+        return setDisplayMessageShow({message: postIsValid.message, color: 'red'});
+    }
+    setPostPage(true);
+  }
+
   useEffect(() => {
     if(valueChat){
       setStyle({transform: 'translateX(100%)'});
@@ -94,12 +114,13 @@ function Chat({online, valueChat, onExit, toUser}) {
   ws.onmessage = (message) => {
     message = JSON.parse(message.data);
     if(message.type === "getMessages"){
+      console.log(message.messageData);
       setAllMessages(message.messageData);
     } else if (message.type === "sendMessage"){
       setMessage('');
       setMood({});
       setAllMessages([...allMessages,message.data]);
-      if(message.data.to._id === fromUserId && ws.readyState === 1){
+      if(message.data.to === fromUserId && ws.readyState === 1){
         ws.send(JSON.stringify({viewedUser: fromUserId, sentUser: toUser?._id, type: "markSeen"}));
       }
       setSendLoading(false)
@@ -113,7 +134,7 @@ function Chat({online, valueChat, onExit, toUser}) {
       }
     } else if (message.type === 'deleteMessages') {
       if(message.status){
-        setAllMessages(allMessages.filter((message) => !selectedMessages.includes(message._id)));
+        setAllMessages(allMessages.filter((message) => !selectedMessages.map(message => message._id).includes(message._id)));
         setSelectedMessages([]);
       }
     }
@@ -121,7 +142,9 @@ function Chat({online, valueChat, onExit, toUser}) {
 
   const scrollToBottom = () => {
     const chat = document.getElementById("chat-body");
-    chat.scrollTop = chat.scrollHeight;
+    if(chat){
+      chat.scrollTop = chat.scrollHeight;
+    }
   };
 
   useEffect(() => {
@@ -136,21 +159,7 @@ function Chat({online, valueChat, onExit, toUser}) {
 
     setSendLoading(true);
     setScrollBehavior('smooth');
-    const from = {
-      _id: user?._id,
-      name: user?.name,
-      email: user?.email,
-      username: user?.username,
-      mobile: user?.mobile
-    };
-    const to = {
-      _id: toUser?._id,
-      name: toUser?.name,
-      email: toUser?.email,
-      username: toUser?.username,
-      mobile: toUser?.mobile
-    }
-    const messageData = {from, to, content: message, mood, type: 'sendMessage'};
+    const messageData = {from: user?._id, to: toUser?._id, content: message, mood, type: 'sendMessage'};
     ws.send(JSON.stringify(messageData));
   }
 
@@ -160,10 +169,12 @@ function Chat({online, valueChat, onExit, toUser}) {
 
   return (
     <div className={styles.wrapper} style={style}>
+      { displayMessageShow.message ? <DisplayMessage message={displayMessageShow.message} color={displayMessageShow.color} onClick={() => setDisplayMessageShow({})}/> : '' }
+      {postPage ? <AddPost messages={selectedMessages} userId={user?._id} withUserId={toUser?._id} onCancel={() => setPostPage(false)}/> : <>
       <div className={styles.container} id='chat-body' style={{ scrollBehavior }}>
-        {!selectedMessages.length ? 
+        { !selectedMessages.length ? 
         <div className={styles.header}>
-            <ProfilePicture borderWidth='0' onClick={() => navigate(`/profile?username=${toUser?.username}`)}/>
+            <ProfilePicture borderWidth='0' imageSrc={toUser?.profilePicUrl} onClick={() => navigate(`/profile?username=${toUser?.username}`)}/>
             <div className={styles["username-online"]}>
               { isOnline ? 
                 <div className={styles.online}> 
@@ -183,7 +194,7 @@ function Chat({online, valueChat, onExit, toUser}) {
             <div className={styles["header-button"]} onClick={() => setSelectedMessages([])}>
               UNSELECT
             </div>
-            <div className={styles["header-button"]}>
+            <div className={styles["header-button"]} onClick={handlePostClick}>
               POST
             </div>
             <div className={styles["header-button"]} onClick={handleDeleteMessages} >
@@ -194,8 +205,15 @@ function Chat({online, valueChat, onExit, toUser}) {
         <div className={styles.body}>
           {
             allMessages.map((msg) => {
-              const { content, mood, sendAt, from, to, _id, seen} = msg;
-              return <Message key={_id} content={content} mood={mood} sendAt={sendAt} from={from} to={to._id} fill={from._id === fromUserId} seen={seen} onClick={handleMessageClick(_id)} active={selectedMessages.includes(_id)}/>
+              const { content, mood, sendAt, from, _id, seen} = msg;
+              let active = false;
+              selectedMessages.forEach((message) => {
+                if(message._id === _id){
+                  active = true;
+                  return;
+                }
+              })
+              return <Message key={_id} content={content} mood={mood} sendAt={sendAt} fill={from === fromUserId} seen={seen} onClick={handleMessageClick(msg)} active={active}/>
             })
           }
         </div>
@@ -207,13 +225,13 @@ function Chat({online, valueChat, onExit, toUser}) {
             })}
           </div> 
           <div className={styles.footer}>
-            <input value={message} placeholder='type here...' className={styles.input} onChange={(e) => setMessage(e.target.value)}/>
+            <input value={message} placeholder='type here...' className={styles.input} onChange={(e) => setMessage(e.target.value)} spellCheck='false' />
             { message.length ? 
               <Button3 imageType='send' size='30px' onClick={handleSendMessage} loading={sendLoading}/>
               : '' }
 
           </div>
-        </div>
+        </div> </>}
     </div>
   )
 }

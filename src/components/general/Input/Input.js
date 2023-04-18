@@ -11,7 +11,7 @@ function Input({label, width, type, value, onChange, error}) {
 
   return (
     <div className={style.container} style={{ width, maxWidth}}>
-        <input className={style.input} type={type} value={value} onChange={onChange} style={{borderColor:error ? 'red' : '', color:error ? 'red' : '', opacity}} required/>
+        <input className={style.input} type={type} value={value} onChange={onChange} style={{borderColor:error ? 'red' : '', color:error ? 'red' : '', opacity}} spellCheck='false' required/>
         <div className={style.label} style={{color:error ? 'red' : '', opacity}}>
             {error ? error : label}
         </div>

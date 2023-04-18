@@ -51,9 +51,11 @@
 }
 
 .header-button {
-    font-size: 17px;
+    font-size: 15px;
     font-weight: normal;
-    padding: 5px 15px 5px 15px;
+    height: 35px;
+    width: 120px;
+    line-height: 35px;
     border: 1px solid rgba(128, 128, 128, 0.5);
     cursor: pointer;
     border-radius: 5px;
@@ -157,6 +159,9 @@
     .header-button {
         font-size: 13px;
     }
+    .header-button{
+        width: 100px;
+    }
 }
 
 @media screen and (max-width: 650px) {
@@ -178,10 +183,10 @@
     .bio-text{
         font-size: 12px;
     }
-    .header-button {
-        font-size: 11px;;
-    }
     .bio {
         gap: 0;
+    }
+    .header-button{
+        width: 100px;
     }
 }

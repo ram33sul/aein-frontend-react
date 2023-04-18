@@ -6,32 +6,37 @@
     align-items: flex-end;
     border: 1px solid transparent;
     padding: 1px;
-    transition: var(--transition), opacity 0s, border 0s;
-    border-radius: 20px;
+    transition: all 0.2s;
+    border-radius: 5px;
 }
 
 .container {
     width: fit-content;
     max-width: 80%;
     padding: 6px 10px 6px 10px;
-    border: 2px solid var(--foreground-color);
+    border: 1px solid var(--foreground-color);
     color: var(--foreground-color);
     font-weight: normal;
     font-size: 17px;
     border-radius: 20px;
+    white-space:pre-wrap;
+    overflow-wrap: break-word;
 }
 
 .time-and-seen {
     color: var(--foreground-color);
+    background-color: transparent;
 }
 
 .time {
     font-size: 12px;
+    background-color: transparent;
 }
 
 .seen {
     font-size: 12px;
     color: green;
     text-align: center;
+    background-color: transparent;
 }
 

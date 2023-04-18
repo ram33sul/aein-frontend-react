@@ -10,6 +10,8 @@ import useMediaQuery from '../../customHooks/mediaQuery'
 import { useDispatch, useSelector } from 'react-redux'
 import { wsConnect } from '../../redux/webSocket/wsActions'
 import EditProfile from '../../components/fragments/EditProfile/EditProfile'
+import Settings from '../../components/fragments/Settings/Settings'
+import BlockedUsers from '../../components/fragments/BlockedUsers/BlockedUsers'
 function Home() {
 
     const [ isWidth, setIsWidth ] = useState('loading');
@@ -32,6 +34,8 @@ function Home() {
             <Route path='explore' element={<> <Navbar active='explore' /> <Explore /></>} />
             <Route path='messages' element= { isWidth ? <Navigate to="/" /> : <> <Navbar active='messages' /> <Messages/></>} />
             <Route path='editProfile' element={<> <Navbar active='profile' /> <EditProfile /></>} />
+            <Route path='settings' element={<> <Navbar active='settings' /> <Settings /></>} />
+            <Route path='blockedUsers' element={<> <Navbar active='settings' /> <BlockedUsers /></>} />
             <Route path='*' element={<><Navigate to="/" /></>} />
         </Routes>
         { isWidth ? <Messages/> : ''}

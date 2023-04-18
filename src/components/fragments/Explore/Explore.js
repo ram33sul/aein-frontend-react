@@ -18,7 +18,7 @@ function Explore() {
         if(searchInput){
             setSearchLoading(true);
             axios.get(`/user/usersList?keyword=${searchInput}`).then((response) => {
-                setSearchResult(response.data.users.filter((data) => data._id !== user._id));
+                setSearchResult(response.data.users.filter((data) => data._id !== user._id && !user.blockedUsers.includes(data._id)));
             }).catch((error) => {
                 console.log(error);
             }).finally(()=>{

@@ -7,9 +7,11 @@ import axios from "axios";
 import Loading from "../../general/Loading/Loading";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchUserLogout } from "../../../redux/user/userActions";
+import { fetchUserLogout, fetchUserSuccess } from "../../../redux/user/userActions";
 import { wsDisconnect } from "../../../redux/webSocket/wsActions";
 import MoreOptionIcon from "../../icons/MoreOptionIcon/MoreOptionIcon";
+import DisplayMessage from "../../general/DisplayMessage/DisplayMessage";
+
 
 function Profile() {
 
@@ -22,7 +24,11 @@ function Profile() {
     const [ pageLoading, setPageLoading ] = useState(true);
     const [ user, setUser ] = useState({});
     const loggedInUser = state.user.user.username;
+    const profilePic = user.profilePicUrl;
     const [ moreOptions, setMoreOptions ] = useState(false);
+    const [ isFollowing, setIsFollowing ] = useState('loading');
+    const [ followLoading, setFollowLoading ] = useState(false);
+    const [ showDisplayMessage, setShowDisplayMessage ] = useState(false)
     const navigate = useNavigate();
 
     const handleLogout = () => {
@@ -35,33 +41,72 @@ function Profile() {
         })
     }
 
-    const handleChangeTheme = () => {
-        const theme = JSON.parse(localStorage.getItem("aein-app-theme"));
-        if(theme === 'dark'){
-            document.documentElement.style.setProperty('--background-color','white');
-            document.documentElement.style.setProperty('--foreground-color','black');
-            localStorage.setItem("aein-app-theme", JSON.stringify("light"));
-        } else {
-            document.documentElement.style.setProperty('--background-color','black');
-            document.documentElement.style.setProperty('--foreground-color','white');
-            localStorage.setItem("aein-app-theme", JSON.stringify("dark"));
-        }
+    const handleFollow = () => {
+        setFollowLoading(true);
+        axios.post('user/follow',{
+            followingUserId: state.user.user._id,
+            followedUserId: user._id
+        }).then((response) => {
+            dispatch(fetchUserSuccess(response.data))
+        }).catch((error) => {
+            setShowDisplayMessage({message: error.response.data[0].message, color: 'red'});
+        }).finally(() => {
+            setFollowLoading(false);
+        })
+    }
+
+    const handleUnfollow = () =>{
+        setFollowLoading(true);
+        axios.post('user/unfollow',{
+            unfollowingUserId: state.user.user._id,
+            unfollowedUserId: user._id
+        }).then((response) => {
+            dispatch(fetchUserSuccess(response.data))
+        }).catch((error) => {
+            showDisplayMessage({message: error.response.data[0].message, color: 'red'})
+        }).finally(() => {
+            setFollowLoading(false);
+        })
+    }
+
+    const handleBlockuser = () => {
+        axios.post('user/blockUser', {
+            userId: state.user.user._id,
+            userIdToBeBlocked: user._id
+        }).then((response) => {
+            dispatch(fetchUserSuccess(response.data))
+        }).catch((error) => {
+            showDisplayMessage({message: error.response.data[0].message, color: 'red'})
+        })
     }
 
     useEffect(() => {
         axios.get(`/user/userDetails?username=${username}&email=${email}`).then((response) => {
+            if(state.user.user.blockedUsers.includes(response.data._id)){
+                return;
+            }
             setUser(response.data);
         }).catch((error) => {
             console.log(error);
         }).finally(() => {
             setPageLoading(false);
         })
-    },[username,email])
+    },[username, email, user, state])
 
+    useEffect(() => {
+        if(!user._id){
+            return;
+        }
+        if(state.user.user.following.includes(user._id)){
+            return setIsFollowing('yes');
+        }
+        setIsFollowing('no')
+    },[state, user])
 
     return(
         
         <div className={styles.container}>
+            {showDisplayMessage.message ? <DisplayMessage message={showDisplayMessage.message} color={showDisplayMessage.color} onClick={() => setShowDisplayMessage(false)}/> : ''}
             {pageLoading ? <Loading /> : user.username ? <>
             <div className={styles.username}>
                 <UsernameText fontSize='20px'  username={user.username ?? 'loading'}/>
@@ -79,21 +124,33 @@ function Profile() {
                     { user.username === loggedInUser ?
                         <div className={styles["header-button"]} onClick={() => navigate('/editProfile')}>
                             Edit profile
-                        </div> :
-                        <div className={styles["header-button"]} style={{backgroundColor: 'var(--gold-color)', color: 'var(--background-color)', borderColor: 'var(--gold-color)'}}>
-                            Follow
-                        </div>
-                    }
+                        </div> : <>
+                        {
+                            isFollowing === 'yes' ?
+                            <div className={styles["header-button"]} style={{backgroundColor: 'var(--foreground-color)', color: 'var(--background-color)', borderColor: 'var(--foreground-color)'}} onClick={handleUnfollow}>
+                                { followLoading ? <Loading scale='0.7' /> :                            
+                                'Unfollow' }
+                            </div> :
+                            isFollowing === 'no' ?
+                            <div className={styles["header-button"]} style={{backgroundColor: 'var(--gold-color)', color: 'var(--background-color)', borderColor: 'var(--gold-color)'}} onClick={handleFollow}>                            
+                                 { followLoading ? <Loading scale='0.7' /> :                            
+                                'Follow' }
+                            </div> :
+                            <div className={styles["header-button"]} style={{backgroundColor: 'var(--background-color)', color: 'var(--background-color)', borderColor: 'var(--foreground-color)'}}>                            
+                                <Loading scale='0.7'/>
+                            </div>
+                        } </>
+                    } 
                 </div>
 
                 <div className={styles["header-middle"]}>
-                    <ProfilePicture size='100px' borderWidth='0'/>
+                    <ProfilePicture size='100px' borderWidth='0' imageSrc={profilePic}/>
                 </div>
 
                 <div className={styles["header-section"]}>
                     <div className={styles["header-follow-section"]}>
                         <div className={styles["header-follow-count"]}>
-                            {user.followers?.length ?? 'loading'}
+                            {user.following?.length ?? 'loading'}
                         </div>
                         <div className={styles["header-follow-label"]} >
                             Following
@@ -116,15 +173,15 @@ function Profile() {
                                 <div className={styles["more-options-option"]} onClick={handleLogout}>
                                     Logout
                                 </div>
-                                <div className={styles["more-options-option"]} onClick={handleChangeTheme}>
-                                    Change theme
+                                <div className={styles["more-options-option"]} onClick={() => navigate('/settings')}>
+                                    Settings
                                 </div>
                                 {/* <div className={styles["more-options-option"]}>
                                     Change color mode
                                 </div> */}
                             </div> : 
                             <div className={styles["more-options"]}>
-                                <div className={styles["more-options-option"]}>
+                                <div className={styles["more-options-option"]} onClick={handleBlockuser}>
                                     Block user
                                 </div>
                                 <div className={styles["more-options-option"]}>

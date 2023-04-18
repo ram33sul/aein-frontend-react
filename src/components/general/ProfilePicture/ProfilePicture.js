@@ -8,9 +8,9 @@ function ProfilePicture({imageSrc, size, borderColor, borderWidth, onClick}) {
     onClick = onClick ?? (() => {});
   return (
     <div className={styles.container} style={{borderColor, borderWidth, width: size, height: size, minWidth: size, minHeight: size}} onClick={onClick}>
-        { imageSrc ? <img src={imageSrc} alt='profile' className={styles.image} /> :
+        { imageSrc ? <div className={styles.image} style={{backgroundImage: `url(${imageSrc})`}}> </ div> : 
         <div className={styles["round-wrapper"]}> <div className={styles.round} />
-        <div className={styles.round} /> </div>}
+        <div className={styles.round} /> </div> }
     </div>
   )
 }

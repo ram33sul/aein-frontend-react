@@ -10,12 +10,14 @@ function NotificationIcon({active, height, width}) {
     <div style={{height, width}}>
         <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
             <g id="notification-icon" clipPath="url(#clip0_0_1)">
-                <path id="triangle" d="M58.0183 30.9634L92.0394 59.4106C101 66.9035 95.702 81.5 84.0211 81.5H15.9789C4.29802 81.5 -1.00042 66.9034 7.96058 59.4106L41.9817 30.9634C46.6229 27.0826 53.3771 27.0826 58.0183 30.9634Z" stroke={foregroundColor} strokeWidth="5" fill={active ? foregroundColor : 'none'}/>
-                <circle id="circle1" cx="50" cy="15" r="12.5" stroke={foregroundColor} strokeWidth="5" fill={active ? foregroundColor : 'none'}/>
-                <circle id="circle2" cx="50" cy="90" r="7.5" stroke={foregroundColor} strokeWidth="5" fill={active ? foregroundColor : 'none'}/>
+                <rect width="100" height="100" fill="none"/>
+                <path id="triangle" d="M56.4146 32.8813L90.4358 61.3285C97.6046 67.3228 93.3658 79 84.0211 79H15.9789C6.6342 79 2.39543 67.3228 9.56424 61.3285L43.5854 32.8813C47.2983 29.7767 52.7017 29.7767 56.4146 32.8813Z" stroke={foregroundColor} strokeWidth="10" fill={active ? foregroundColor : 'none'}/>
+                <circle id="circle1" cx="50" cy="15" r="10" stroke={foregroundColor} strokeWidth="10" fill={active ? foregroundColor : 'none'}/>
+                <circle id="circle2" cx="50" cy="90" r="5" stroke={foregroundColor} strokeWidth="10" fill={active ? foregroundColor : 'none'}/>
             </g>
         </svg>
     </div>
+
   )
 }
 

@@ -180,7 +180,7 @@ function Login() {
             <Input label='Username or Email' value={usernameOrEmail} onChange={(e) => setUsernameOrEmail(e.target.value)} />
             <Input label='Password' value={password} onChange={(e) => setPassword(e.target.value)} type='password'/>
             <Button width='100%' maxWidth='300px' content='Login' onClick={handleSubmit} loading={buttonLoading}/>
-            <span className={styles.span} onClick={() => setForgotPasswordPage(true)}>Forgot Password?</span>
+            <span className={styles.span} onClick={() =>{ setErrorMessage(''); setForgotPasswordPage(true)}}>Forgot Password?</span>
             <Line width='100%' maxWidth='300px' />
             <Button2 width='100%' maxWidth='300px' content='CREATE NEW ACCOUNT' onClick={() => navigate('/signup')}/>
             <Button2 width='100%' maxWidth='300px' content='LOGIN WITH OTP' onClick={() => setLoginWithOtpPage(true)}/>

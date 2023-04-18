@@ -18,7 +18,7 @@ function EditProfile() {
     const user = state.user.user;
     const navigate = useNavigate();
 
-    const [ profilePic, setProfilePic ] = useState('');
+    const [ profilePic, setProfilePic ] = useState(user?.profilePicUrl);
     const [ name, setName ] = useState(user?.name)
     const [ username, setUsername ] = useState(user?.username);
     const [ password, setPassword ] = useState('');
@@ -26,7 +26,7 @@ function EditProfile() {
     const [ bio, setBio ] = useState(user?.bio);
 
     const [ changePasswordPage, setChangePasswordPage ] = useState(false);
-    const [ displayMessage, setDisplayMessage ] = useState('');
+    const [ displayMessage, setDisplayMessage ] = useState({});
     const [ changePasswordLoading, setChangePasswordLoading ] = useState(false)
     const [ saveChangesLoading, setSaveChangesLoading ] = useState(false);
 
@@ -56,9 +56,14 @@ function EditProfile() {
             return;
         }
         setSaveChangesLoading(true)
-        axios.patch('/user/editProfile', {name, username, bio: bio.trim(), profilePic: profilePicSelected}).then((response) => {
+        const formData = new FormData();
+        formData.append("name", name);
+        formData.append("username", username);
+        formData.append("bio", bio.trim());
+        formData.append("image", profilePicSelected)
+        axios.patch('/user/editProfile', formData, {headers: {'Content-Type': 'multipart/form-data'}}).then((response) => {
             dispatch(fetchUserSuccess(response.data))
-            setDisplayMessage('Changes saved Successfully')
+            setDisplayMessage({message: "Changes saved successfully", color: 'green'});
             setNameError('');
             setUsernameError('');
             setBioError('');
@@ -101,7 +106,7 @@ function EditProfile() {
             setChangePasswordPage(false);
             setPassword('');
             setConfirmPassword('');
-            setDisplayMessage('Password changed Successfully');
+            setDisplayMessage({message: "Password changes Successfully", color: 'green'});
         }).catch((error) => {
             setPasswordError(error.response.data.message);
         }).finally(() => {
@@ -110,6 +115,10 @@ function EditProfile() {
     }
 
     const handleProfilePicSelected = (e) =>{
+        if(e.target.files[0].size > 1000000){
+            setDisplayMessage({message: 'Image size limit is 1MB', color: 'red'});
+            return;
+        }
         setProfilePicSelected(e.target.files[0]);
     }
 
@@ -121,8 +130,8 @@ function EditProfile() {
 
   return (
     <div className={styles.container}>
-        { displayMessage ?
-            <DisplayMessage message={displayMessage} color='green' onClick={() => setDisplayMessage(false)}/> : '' }
+        { displayMessage.message ?
+            <DisplayMessage message={displayMessage.message} color={displayMessage.color} onClick={() => setDisplayMessage({})}/> : '' }
         { !changePasswordPage ? <> 
         <ProfilePicture size='100px' borderWidth='0' imageSrc={profilePic}/>
         <div className={styles.button}>

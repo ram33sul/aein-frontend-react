@@ -12,6 +12,9 @@
     height: 100%;
     border: 1px solid var(--background-color);
     border-radius: 9px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
 }
 
 .round-wrapper {

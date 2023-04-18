@@ -21,9 +21,11 @@ function Navbar({active}) {
 
     const isMessage = useMediaQuery('(max-width: 650px)');
     const icon = isMessage ? 'Messages' : 'Settings'
-    const iconActive = icon === 'settings' ? settings : messages;
+    const iconActive = icon === 'Settings' ? settings : messages;
 
-    const username = useSelector((state) => state.user.user.username);
+    const user = useSelector((state) => state.user.user)
+    const username = user.username;
+    const profilePic = user.profilePicUrl;
 
     const navigate = useNavigate()
  
@@ -41,7 +43,7 @@ function Navbar({active}) {
                 <Navicon icon={icon.toLowerCase()} label={icon} active={iconActive} onClick={() => navigate(`/${icon.toLowerCase()}`)}/>
             </div>
             <div className={styles.profileWrap} onClick={() => navigate(`/profile?username=${username}`)}>
-                <ProfilePicture size='40px' borderWidth='0'/>
+                <ProfilePicture size='40px' borderWidth='0' imageSrc={profilePic}/>
                 <div className={styles.username}>
                 <UsernameText username={username ?? 'username'} active={active === 'profile' && username === params.get("username")}/>
                 </div>

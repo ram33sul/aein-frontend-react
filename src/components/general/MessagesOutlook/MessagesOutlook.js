@@ -12,7 +12,7 @@ function MessagesOutlook({imageSrc, username, message, notificationCount, setVal
     onClick = onClick ?? (() => {});
   return (
     <div className={styles.container} onClick={onClick}>
-        <ProfilePicture size='50px' borderWidth='0'/>
+        <ProfilePicture size='50px' borderWidth='0' imageSrc={imageSrc}/>
         <div className={styles['username-message-notificationCount']}>
             <div className={styles['username-notificationCount']}>
                 <UsernameText username={username} size='15px' />
