@@ -9,7 +9,7 @@ function UserOverlook({user}) {
     const navigate = useNavigate()
   return (
     <div className={styles["search-result"]} onClick={() => navigate(`/profile?username=${user?.username}`)}>
-        <ProfilePicture borderWidth='0'/>
+        <ProfilePicture borderWidth='0' imageSrc={user.profilePicUrl}/>
         <div className={styles["search-result-section"]}>
             <UsernameText username={user?.username} />
             <div className={styles["search-result-name"]}>

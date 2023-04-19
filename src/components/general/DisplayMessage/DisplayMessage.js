@@ -6,6 +6,7 @@ function DisplayMessage({message, color, onClick}) {
     message = message ?? 'message';
     color = color ?? '';
     onClick = onClick ?? (() => {});
+
   return (
     <div className={styles.background}>
         <div className={styles.container}>

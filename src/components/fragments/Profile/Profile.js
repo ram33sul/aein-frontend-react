@@ -29,6 +29,7 @@ function Profile() {
     const [ isFollowing, setIsFollowing ] = useState('loading');
     const [ followLoading, setFollowLoading ] = useState(false);
     const [ showDisplayMessage, setShowDisplayMessage ] = useState(false)
+    const [ shareProfileLoading, setShareProfileLoading ] = useState(false)
     const navigate = useNavigate();
 
     const handleLogout = () => {
@@ -75,8 +76,20 @@ function Profile() {
             userIdToBeBlocked: user._id
         }).then((response) => {
             dispatch(fetchUserSuccess(response.data))
+            setShowDisplayMessage({message: `user (${username}) Blocked successfully`, color: 'green'})
         }).catch((error) => {
-            showDisplayMessage({message: error.response.data[0].message, color: 'red'})
+            setShowDisplayMessage({message: error.response.data[0].message, color: 'red'})
+        })
+    }
+
+    const handleShareProfileClick = () => {
+        setShareProfileLoading(true);
+        axios.get(`/user/shareProfile?userId=${user._id}`).then((response) => {
+            setShowDisplayMessage({message: `url: ${response.data.url}`, color: 'blue'})
+        }).catch((error) => {
+            setShowDisplayMessage({message: "Error occured while loading!", color: 'red'})
+        }).finally(() => {
+            setShareProfileLoading(false)
         })
     }
 
@@ -103,10 +116,11 @@ function Profile() {
         setIsFollowing('no')
     },[state, user])
 
+
     return(
         
-        <div className={styles.container}>
-            {showDisplayMessage.message ? <DisplayMessage message={showDisplayMessage.message} color={showDisplayMessage.color} onClick={() => setShowDisplayMessage(false)}/> : ''}
+        <div className={styles.container} style={{overflowY: showDisplayMessage.message ? 'hidden' : ''}}>
+            {showDisplayMessage.message ? <DisplayMessage message={showDisplayMessage.message} color={showDisplayMessage.color} onClick={showDisplayMessage.color === 'green' ? () => navigate('/') : () => setShowDisplayMessage(false)}/> : ''}
             {pageLoading ? <Loading /> : user.username ? <>
             <div className={styles.username}>
                 <UsernameText fontSize='20px'  username={user.username ?? 'loading'}/>
@@ -156,7 +170,7 @@ function Profile() {
                             Following
                         </div>
                     </div>
-                    <div className={styles["header-button"]}>
+                    <div className={styles["header-button"]} style={{opacity: shareProfileLoading ? '0.3' : ''}} onClick={shareProfileLoading ? () => {} : handleShareProfileClick}>
                         Share Profile
                     </div>
                 </div>
