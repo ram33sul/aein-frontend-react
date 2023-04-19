@@ -6,7 +6,7 @@ import WithUsernameText from '../WithUsernameText/WithUsernameText'
 import Message from '../Message/Message'
 import Line from '../Line/Line'
 import ButtonPost from '../ButtonPost/ButtonPost'
-function Post({username, withUsername, messages, buttons}) {
+function Post({post}) {
   return (
     <div className={styles.container}>
         <div className={styles.header}>

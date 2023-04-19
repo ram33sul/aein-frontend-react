@@ -5,10 +5,10 @@
     justify-content: center;
     align-items: center;
     background-color: rgba(128, 128, 128, 0.7);
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
-    z-index: 100;
+    z-index: 999;
 }
 @supports (-webkit-backdrop-filter: none) or (backdrop-filter: none) {
     .background {
