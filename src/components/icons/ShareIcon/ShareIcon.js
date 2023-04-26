@@ -1,20 +1,17 @@
 import React from 'react'
+import styles from './ShareIcon.module.css'
+function ShareIcon({active, height, width, onClick}) {
 
-function ShareIcon({active, height, width}) {
-
-    height = height ?? '20px';
-    width = width ?? '20px';
+    height = height ?? '25px';
+    width = width ?? '25px';
     const foregroundColor = 'var(--foreground-color)';
-    const backgroundColor = 'var(--background-color)';
+
   return (
-    <div style={{width, height}}>
-    <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <g clip-path="url(#clip0_0_1)">
-    <rect width="100" height="100" fill="white"/>
-    <path d="M42.6937 95.0098L4.80778 4.85168L94.9659 42.7376L42.6937 95.0098Z" stroke={foregroundColor} strokeWidth="5"/>
-    <path d="M5.5 6L69.5 69.5" stroke={foregroundColor} strokeWidth="5"/>
-    </g>
-    </svg>
+    <div style={{width, height}} onClick={onClick}>
+      <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" className={styles.icon}>
+        <path d="M76.64 10.5413C84.8853 7.10061 93.1605 15.3758 89.7198 23.6211L63.6317 86.1383C60.8915 92.7051 52.3634 94.3898 47.3319 89.3583L10.9027 52.9291C5.87128 47.8977 7.55599 39.3696 14.1227 36.6294L76.64 10.5413Z" stroke={foregroundColor} strokeWidth="10" className={styles.stroke}/>
+        <rect x="26" y="67.5685" width="80" height="10" transform="rotate(-45 26 67.5685)" fill={foregroundColor} className={styles.stroke2}/>
+      </svg>
     </div>
   )
 }

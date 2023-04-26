@@ -12,6 +12,8 @@ function Explore() {
     const [ searchInput, setSearchInput ] = useState('');
     const [ searchResult, setSearchResult ] = useState([]);
     const [ searchLoading, setSearchLoading ] = useState(false);
+    const [ posts, setPosts ] = useState([]);
+
     const user = useSelector((state) => state.user.user);
 
     useEffect(() => {
@@ -27,6 +29,14 @@ function Explore() {
         }
     },[searchInput, user])
 
+    useEffect(() => {
+        axios.get(`/post/getExplorePosts?userId=${user?._id}`).then((response) => {
+            setPosts(response.data)
+        }).catch((error) => {
+            console.log(error);
+        })
+    },[user?._id])
+
   return (
     <div className={styles.container}>
         <div className={styles.header}>
@@ -37,12 +47,17 @@ function Explore() {
         </div>
         { searchInput.length === 0 ? 
                 <div className={styles["post-body"]}>
+                    {
+                        posts.length ? posts.map((post) => {
+                            return <Post postData={post} key={post._id}/>
+                        }) : <div style={{margin: 'auto', color: 'var(--foreground-color)'}}> no posts to show </div>
+                    }
+                {/* <Post />
                 <Post />
                 <Post />
                 <Post />
                 <Post />
-                <Post />
-                <Post />
+                <Post /> */}
             </div>
             : searchLoading ? <div className={styles.loading} > <Loading /> </div>:
             searchResult.length !== 0 ?

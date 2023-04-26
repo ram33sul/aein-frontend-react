@@ -30,5 +30,18 @@
 
 .actions-container-1 {
     display: flex;
-    gap: 10px;
+    gap: 15px;
+    width: 25%;
+    min-width: fit-content;
+    justify-content: space-between;
+}
+
+.icon-and-count {
+    width: fit-content;
+}
+
+.count {
+    text-align: center;
+    font-size: 11px;
+    padding-top: 2px;
 }

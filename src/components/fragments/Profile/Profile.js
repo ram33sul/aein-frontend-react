@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import styles from './Profile.module.css';
 import ProfilePicture from "../../general/ProfilePicture/ProfilePicture";
 import UsernameText from "../../general/UsernameText/UsernameText";
-import Post from "../../general/Post/Post";
 import axios from "axios";
 import Loading from "../../general/Loading/Loading";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -11,6 +10,7 @@ import { fetchUserLogout, fetchUserSuccess } from "../../../redux/user/userActio
 import { wsDisconnect } from "../../../redux/webSocket/wsActions";
 import MoreOptionIcon from "../../icons/MoreOptionIcon/MoreOptionIcon";
 import DisplayMessage from "../../general/DisplayMessage/DisplayMessage";
+import Post from "../../general/Post/Post";
 
 
 function Profile() {
@@ -21,6 +21,7 @@ function Profile() {
     const [ params ] = useSearchParams();
     const username = params.get("username");
     const email = params.get("email");
+    const userId = params.get("userId");
     const [ pageLoading, setPageLoading ] = useState(true);
     const [ user, setUser ] = useState({});
     const loggedInUser = state.user.user.username;
@@ -30,6 +31,7 @@ function Profile() {
     const [ followLoading, setFollowLoading ] = useState(false);
     const [ showDisplayMessage, setShowDisplayMessage ] = useState(false)
     const [ shareProfileLoading, setShareProfileLoading ] = useState(false)
+    const [ posts, setPosts ] = useState([])
     const navigate = useNavigate();
 
     const handleLogout = () => {
@@ -94,17 +96,19 @@ function Profile() {
     }
 
     useEffect(() => {
-        axios.get(`/user/userDetails?username=${username}&email=${email}`).then((response) => {
-            if(state.user.user.blockedUsers.includes(response.data._id)){
-                return;
-            }
-            setUser(response.data);
-        }).catch((error) => {
-            console.log(error);
-        }).finally(() => {
-            setPageLoading(false);
-        })
-    },[username, email, user, state])
+        if(username || email || userId){
+            axios.get(`/user/userDetails?username=${username}&email=${email}&userId=${userId}`).then((response) => {
+                if(state.user.user.blockedUsers.includes(response.data._id)){
+                    return;
+                }
+                setUser(response.data);
+            }).catch((error) => {
+                console.log(error);
+            }).finally(() => {
+                setPageLoading(false);
+            })
+        }
+    },[username, email, state, userId])
 
     useEffect(() => {
         if(!user._id){
@@ -116,6 +120,15 @@ function Profile() {
         setIsFollowing('no')
     },[state, user])
 
+    useEffect(() => {
+        if(user?._id){
+            axios.get(`/post/getPostsByUser?userId=${user?._id}`).then((response) => {
+                setPosts(response.data)
+            }).catch((error) => {
+                console.log(error);
+            })
+        }
+    },[user?._id])
 
     return(
         
@@ -210,10 +223,16 @@ function Profile() {
                 </div>
             </div>
             <div className={styles.body}>
+                {
+                    posts.length ? 
+                    posts.map((post) => {
+                        return <Post postData={post} key={post._id}/>
+                    }) : <div style={{ color: 'var(--foreground-color)', margin: 'auto'}} > No posts yet! </div>
+                }
+                {/* <Post />
                 <Post />
                 <Post />
-                <Post />
-                <Post />
+                <Post /> */}
             </div>
             </> : <div style={{textAlign: "center"}}> No such User! </div>}
         </div>

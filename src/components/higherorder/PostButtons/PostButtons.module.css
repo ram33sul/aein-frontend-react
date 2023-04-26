@@ -1,0 +1,9 @@
+.container {
+    width: fit-content;
+}
+
+.count {
+    text-align: center;
+    font-size: 11px;
+    padding-top: 2px;
+}

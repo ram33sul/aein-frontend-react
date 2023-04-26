@@ -30,7 +30,7 @@ function BlockedUsers() {
                 {   usersList.length ?
                     usersList.map((user) => {
                         return <BlockedListOutlook user={user} messageDisplayFunction={setShowDisplayMessage}/>
-                    }) : <div style={{margin: 'auto'}}>You haven't blocked anyone </div>
+                    }) : <div style={{margin: 'auto', color: 'var(--foreground-color)'}}>You haven't blocked anyone </div>
                 }
             </div>
         }

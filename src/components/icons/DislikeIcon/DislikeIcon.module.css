@@ -1,0 +1,19 @@
+.icon {
+    cursor: pointer;
+}
+
+.stroke {
+    transition: var(--transition), stroke 0.2s, fill 0.2s;
+}
+
+.stroke2 {
+    transition: var(--transition), stroke 0.2s, fill 0.2s;
+}
+
+.icon:hover .stroke {
+    stroke: red;
+}
+
+.icon:hover .stroke2 {
+    fill: red;
+}

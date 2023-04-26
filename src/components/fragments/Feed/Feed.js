@@ -38,13 +38,9 @@ function Feed() {
             {
               posts.length ?
               posts.map((post) => {
-                return <Post post={post} />
-              }) : 'No posts to show'
+                return <Post postData={post} key={post._id}/>
+              }) : <div style={{color: 'var(--foreground-color)', margin: 'auto'}}>The people whom you follow hasn't posted anything yet</div>
             }
-            <Post />
-            <Post />
-            <Post />
-            <Post />
             <div className={styles.extraSpace}>
             </div>
         </div>

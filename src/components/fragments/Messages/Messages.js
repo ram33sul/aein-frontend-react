@@ -29,7 +29,6 @@ function Messages() {
     ws.onmessage = (response) => {
         response = JSON.parse(response.data);
         if(response.type === 'getOverallMessages'){
-            console.log(response.data);
             setOverallMessages(response.data.filter((messageData) => !user.blockedUsers.includes(messageData.foreignUser._id)));
         } else if(response.type === 'sendMessage'){
             if(response.data.to === fromUserId){

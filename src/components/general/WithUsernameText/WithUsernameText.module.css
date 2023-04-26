@@ -3,4 +3,5 @@
     color: var(--foreground-color);
     opacity: 0.5;
     font-weight: normal;
+    cursor: pointer;
 }

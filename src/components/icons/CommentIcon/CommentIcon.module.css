@@ -1,0 +1,12 @@
+.icon {
+    cursor: pointer;
+    transition: var(--transition), opacity 0.2s;
+}
+
+.icon:hover {
+    opacity: 0.5;
+}
+
+.stroke {
+    transition: var(--transition), fill 0.2s;
+}
