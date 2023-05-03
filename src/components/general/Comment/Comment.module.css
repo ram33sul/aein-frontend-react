@@ -1,0 +1,14 @@
+
+.profilePic-username-wrapper {
+    display: flex;
+    gap: 5px;
+    align-items: flex-end;
+}
+
+.comment {
+    font-size: 15px;
+    width: 100%;
+    word-wrap: break-word;
+    white-space:pre-wrap;
+    color: var(--foreground-color);
+}

@@ -1,0 +1,12 @@
+.container {
+    position: relative;
+    height: 60%;
+}
+.replies-wrapper {
+    height: calc(100% - 30px);
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding-bottom: 10px;
+    overflow-y: scroll;
+}

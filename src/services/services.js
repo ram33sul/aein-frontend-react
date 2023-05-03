@@ -1,3 +1,5 @@
+import { useRef, useLayoutEffect } from 'react';
+
 export const changeTheme = () => {
     let theme = JSON.parse(localStorage.getItem("aein-app-theme"));
     if(theme === 'dark'){
@@ -13,3 +15,17 @@ export const changeTheme = () => {
     }
     return theme;
 }
+
+export const useScrollToBottom = (dependency) => {
+    const ref = useRef(null);
+
+    useLayoutEffect(() => {
+        if(ref.current){
+            ref.current.scroll({
+                top: ref.current.scrollHeight
+            })
+        }
+    },[dependency]);
+
+    return ref
+};

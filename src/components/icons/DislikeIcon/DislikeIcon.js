@@ -1,13 +1,39 @@
 import React from 'react'
 import styles from './DislikeIcon.module.css'
-function DislikeIcon({active, height, width, onClick}) {
+import axios from 'axios';
+
+function DislikeIcon({active, height, width, onClick, userId, postId, setPostFunction}) {
 
     height = height ?? '25px';
     width = width ?? '25px';
     const foregroundColor = 'var(--foreground-color)';
     const backgroundColor = 'var(--background-color)';
+
+    const handledisLike = () => {
+      onClick?.();
+      if(active){
+        axios.patch('/post/undislikePost',{
+          userId,
+          postId
+        }).then((response) => {
+            setPostFunction?.(response.data)
+        }).catch((error) => {
+          console.log(error);
+        })
+      } else {
+        axios.patch('/post/dislikePost',{
+          userId,
+          postId
+        }).then((response) => {
+          setPostFunction?.(response.data)
+        }).catch((error) => {
+          console.log(error);
+        })
+      }
+    }
+
   return (
-    <div style={{width, height}} onClick={onClick}>
+    <div style={{width, height}} onClick={handledisLike}>
       <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" className={styles.icon}>
         <circle cx="49.5" cy="49.5" r="42.5" stroke={active ? 'red' : foregroundColor} strokeWidth="10" className={styles.stroke} fill={active ? 'red' : 'none'}/>
         <rect x="25" y="67" width="60" height="10" rx="5" transform="rotate(-45 25 67)" fill={active ? backgroundColor : foregroundColor} className={styles.stroke2}/>

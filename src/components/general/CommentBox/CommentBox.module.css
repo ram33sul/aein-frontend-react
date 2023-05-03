@@ -1,0 +1,14 @@
+.container {
+    position: relative;
+    height: 50%;
+    flex: 1;
+}
+
+.comments-wrapper {
+    height: calc(100% - 30px);
+    overflow-y: scroll;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-bottom: 10px;
+}

@@ -12,6 +12,7 @@ import { wsConnect } from '../../redux/webSocket/wsActions'
 import EditProfile from '../../components/fragments/EditProfile/EditProfile'
 import Settings from '../../components/fragments/Settings/Settings'
 import BlockedUsers from '../../components/fragments/BlockedUsers/BlockedUsers'
+import PostDetails from '../../components/fragments/PostDetails/PostDetails'
 function Home() {
 
     const [ isWidth, setIsWidth ] = useState('loading');
@@ -36,6 +37,7 @@ function Home() {
             <Route path='editProfile' element={<> <Navbar active='profile' /> <EditProfile /></>} />
             <Route path='settings' element={<> <Navbar active='settings' /> <Settings /></>} />
             <Route path='blockedUsers' element={<> <Navbar active='settings' /> <BlockedUsers /></>} />
+            <Route path='postDetails' element={<> <Navbar /> <PostDetails /></>} />
             <Route path='*' element={<><Navigate to="/" /></>} />
         </Routes>
         { isWidth ? <Messages/> : ''}

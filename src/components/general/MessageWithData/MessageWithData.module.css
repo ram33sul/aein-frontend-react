@@ -1,0 +1,6 @@
+
+.user-data-wrapper {
+    display: flex;
+    align-items: flex-end;
+    gap: 5px;
+}

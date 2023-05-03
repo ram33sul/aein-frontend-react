@@ -6,4 +6,5 @@
     text-align: center;
     font-size: 11px;
     padding-top: 2px;
+    color: var(--foreground-color);
 }

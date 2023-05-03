@@ -7,7 +7,6 @@ import Signup from './pages/Signup/Signup';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchUserFailure, fetchUserLogout, fetchUserRequest, fetchUserSuccess } from './redux/user/userActions';
 import axios from 'axios';
-import Testing from './components/Testing';
 
 function App() {
   const state = useSelector((state) => state);
