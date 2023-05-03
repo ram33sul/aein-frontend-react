@@ -6,7 +6,7 @@ import WithUsernameText from '../WithUsernameText/WithUsernameText'
 import Message from '../Message/Message'
 import Line from '../Line/Line'
 import axios from 'axios'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import LikeIcon from '../../icons/LikeIcon/LikeIcon'
 import DislikeIcon from '../../icons/DislikeIcon/DislikeIcon'
 import CommentIcon from '../../icons/CommentIcon/CommentIcon'
@@ -22,6 +22,9 @@ function Post({postData}) {
     const user = useSelector(state => state.user.user);
 
     const navigate = useNavigate()
+
+    const [ params ] = useSearchParams();
+    const activePage = params.get('activePage');
 
     useEffect(() => {
         if(post){
@@ -51,7 +54,7 @@ function Post({postData}) {
             <WithUsernameText username={withUser?.username} onClick={() => navigate(`/profile?userId=${withUser?._id}`)}/>
         </div>
         <div className={styles['messages-wrapper']} >
-            <div onClick={() => navigate(`/postDetails?id=${post._id}`)}>
+            <div onClick={() => navigate(`/postDetails?id=${post._id}&activePage=replies`)}>
             {
                 post.messages.map((message) => {
                     const { _id, content, mood, sendAt, seen, from} = message;
@@ -64,8 +67,8 @@ function Post({postData}) {
                 <div className={styles['actions-container-1']} >
                     <PostButtons Component={LikeIcon} postId={post?._id} count={post?.likes?.length} active={post?.likes?.includes(user?._id)} setPostFunction={setPost}/>
                     <PostButtons Component={DislikeIcon} postId={post?._id} count={post?.dislikes?.length} active={post?.dislikes?.includes(user?._id)} setPostFunction={setPost} />
-                    <PostButtons Component={CommentIcon} postId={post?._id} count={post?.commentsCount} onClick={() => navigate(`/postDetails?id=${post._id}&activePage=comments`)}/>
-                    <PostButtons Component={ReplyIcon} postId={post?._id} count={post?.repliesCount} onClick={() => navigate(`/postDetails?id=${post._id}&activePage=replies`)} />
+                    <PostButtons Component={CommentIcon} postId={post?._id} count={post?.commentsCount} active={activePage==='comments'} onClick={() => navigate(`/postDetails?id=${post._id}&activePage=comments`)}/>
+                    <PostButtons Component={ReplyIcon} postId={post?._id} count={post?.repliesCount} active={activePage==='replies'} onClick={() => navigate(`/postDetails?id=${post._id}&activePage=replies`)} />
                 </div>
                 <PostButtons Component={ShareIcon} postId={post?._id} count={post?.sharesCount} />
             </div>

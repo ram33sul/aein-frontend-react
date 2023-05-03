@@ -1,12 +1,13 @@
 .container {
     position: relative;
-    height: 60%;
+    height: 45%;
+    flex: 1;
 }
 .replies-wrapper {
     height: calc(100% - 30px);
     display: flex;
     flex-direction: column;
     gap: 5px;
-    padding-bottom: 10px;
+    border-bottom: 10px solid var(--background-color);
     overflow-y: scroll;
 }

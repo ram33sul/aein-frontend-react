@@ -2,7 +2,7 @@ import React from 'react'
 import styles from './MessagesOutlook.module.css'
 import ProfilePicture from '../ProfilePicture/ProfilePicture';
 import UsernameText from '../UsernameText/UsernameText';
-function MessagesOutlook({imageSrc, username, message, notificationCount, setValueChat, onClick, bold}) {
+function MessagesOutlook({imageSrc, username, message, notificationCount, setValueChat, onClick, bold, messageType}) {
 
     imageSrc = imageSrc ?? '';
     username = username ?? 'username';
@@ -27,7 +27,7 @@ function MessagesOutlook({imageSrc, username, message, notificationCount, setVal
                 }
             </div>
             <div className={styles.message} style={{fontWeight: bold ? 'bold' : '', opacity: bold ? '1' : ''}}>
-                {message}
+                {messageType === 'post' ? 'Shared a post' : messageType === 'profile' ? 'Shared a profile' : message}
             </div>
         </div>
     </div>

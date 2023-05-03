@@ -1,5 +1,6 @@
 import React from 'react'
 import styles from './Message.module.css'
+import SeenIcon from '../../icons/SeenIcon/SeenIcon';
 function Message({content, mood, fill, seen, sendAt, onClick, active}) {
 
     content = content || 'content';
@@ -23,7 +24,7 @@ function Message({content, mood, fill, seen, sendAt, onClick, active}) {
         <div className={styles["time-and-seen"]}>
             { seen && fill ? 
             <div className={styles.seen}>
-                seen
+                <SeenIcon />
             </div> : ''}
             <div className={styles.time}>
                 {sendAt}

@@ -56,7 +56,6 @@
     font-weight: normal;
     height: 35px;
     width: 120px;
-    line-height: 35px;
     border: 1px solid rgba(128, 128, 128, 0.5);
     cursor: pointer;
     border-radius: 5px;
@@ -64,10 +63,10 @@
     transition-delay: 0;
     color: var(--foreground-color);
     text-align: center;
-}
-
-.header-button:hover {
-    opacity: 0.5;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .header-button:active {

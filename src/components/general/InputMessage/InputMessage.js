@@ -33,7 +33,7 @@ function InputMessage({onSend}) {
   return (
     <div className={styles.container}>
         { error.length ? <DisplayMessage message={error} color='red' onClick={setError('')}/> : <>
-        <input value={value} onChange={(e) => setValue(e.target.value)} className={styles.input} spellCheck="false" />
+        <input value={value} onChange={(e) => setValue(e.target.value)} className={styles.input} spellCheck="false" placeholder='Type here...' />
         { value.trim().length ? 
             loading ?
            <div style={{width: '30px', overflow: 'hidden', position: 'relative', }}><Loading position='absolute' top='0' left='-10px' scale='0.5'/></div> :

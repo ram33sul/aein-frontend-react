@@ -11,6 +11,7 @@ import { wsDisconnect } from "../../../redux/webSocket/wsActions";
 import MoreOptionIcon from "../../icons/MoreOptionIcon/MoreOptionIcon";
 import DisplayMessage from "../../general/DisplayMessage/DisplayMessage";
 import Post from "../../general/Post/Post";
+import ShareIcon from "../../icons/ShareIcon/ShareIcon";
 
 
 function Profile() {
@@ -30,7 +31,6 @@ function Profile() {
     const [ isFollowing, setIsFollowing ] = useState('loading');
     const [ followLoading, setFollowLoading ] = useState(false);
     const [ showDisplayMessage, setShowDisplayMessage ] = useState(false)
-    const [ shareProfileLoading, setShareProfileLoading ] = useState(false)
     const [ posts, setPosts ] = useState([])
     const navigate = useNavigate();
 
@@ -81,17 +81,6 @@ function Profile() {
             setShowDisplayMessage({message: `user (${username}) Blocked successfully`, color: 'green'})
         }).catch((error) => {
             setShowDisplayMessage({message: error.response.data[0].message, color: 'red'})
-        })
-    }
-
-    const handleShareProfileClick = () => {
-        setShareProfileLoading(true);
-        axios.get(`/user/shareProfile?userId=${user._id}`).then((response) => {
-            setShowDisplayMessage({message: `url: ${response.data.url}`, color: 'blue'})
-        }).catch((error) => {
-            setShowDisplayMessage({message: "Error occured while loading!", color: 'red'})
-        }).finally(() => {
-            setShareProfileLoading(false)
         })
     }
 
@@ -183,8 +172,8 @@ function Profile() {
                             Following
                         </div>
                     </div>
-                    <div className={styles["header-button"]} style={{opacity: shareProfileLoading ? '0.3' : ''}} onClick={shareProfileLoading ? () => {} : handleShareProfileClick}>
-                        Share Profile
+                    <div className={styles["header-button"]}>
+                        <ShareIcon text='Share Profile' width='100%' height='100%' profileId={user?._id}/>
                     </div>
                 </div>
             </div>

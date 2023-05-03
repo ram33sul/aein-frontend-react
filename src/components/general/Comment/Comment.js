@@ -19,7 +19,7 @@ function Comment({content, userId}){
         <div className={styles.container}>
             <div className={styles['profilePic-username-wrapper']}>
                 <ProfilePicture imageSrc={user.profilePicUrl} borderWidth='0' size='20px' />
-                <UsernameText username={user.username} fontSize='15px'/>
+                <UsernameText username={user.username} fontSize='13px' opacity='0.5'/>
             </div>
             <div className={styles.comment}>
                 {content}

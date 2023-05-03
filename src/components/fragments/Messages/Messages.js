@@ -34,6 +34,8 @@ function Messages() {
             if(response.data.to === fromUserId){
                 ws.send(JSON.stringify({userId: fromUserId, type: "getOverallMessages"}));
             }
+        } else if(response.type === 'share'){
+            ws.send(JSON.stringify({userId: fromUserId, type: "getOverallMessages"}));
         }
         setSearchLoading(false)
     }
@@ -80,7 +82,7 @@ function Messages() {
                             })) :
                         'no results found') :
                     ( overallMessages.length !==0 ? (overallMessages.map((data) => {
-                        return(<MessagesOutlook onClick={() => setChat(data.foreignUser)} username={data.foreignUser.username} imageSrc={data.foreignUser.profilePicUrl} key={data.messageId} message={data.content} bold={data.newMessageCount && data.newMessageCount > 0} notificationCount={data.newMessageCount}/>)
+                        return(<MessagesOutlook onClick={() => setChat(data.foreignUser)} username={data.foreignUser.username} imageSrc={data.foreignUser.profilePicUrl} key={data.messageId} message={data.content} messageType={data.type} bold={data.newMessageCount && data.newMessageCount > 0} notificationCount={data.newMessageCount}/>)
                             })) : 'no messages yet'
                     )
             }

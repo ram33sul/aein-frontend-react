@@ -10,6 +10,8 @@ import { useNavigate } from 'react-router'
 import AddPost from '../AddPost/AddPost'
 import { validatePost } from '../../../validations/validations'
 import DisplayMessage from '../DisplayMessage/DisplayMessage'
+import SharedPostMessage from '../../general/SharedPostMessage/SharedPostMessage'
+import SharedProfileMessage from '../SharedProfileMessage/SharedProfileMessage'
 
 function Chat({valueChat, onExit, toUser}) {
 
@@ -137,6 +139,14 @@ function Chat({valueChat, onExit, toUser}) {
         setAllMessages(allMessages.filter((message) => !selectedMessages.map(message => message._id).includes(message._id)));
         setSelectedMessages([]);
       }
+    } else if (message.type === "share"){
+      setMessage('');
+      setMood({});
+      setAllMessages([...allMessages,message.messageData]);
+      if(message.messageData.to === fromUserId && ws.readyState === 1){
+        ws.send(JSON.stringify({viewedUser: fromUserId, sentUser: toUser?._id, type: "markSeen"}));
+      }
+      setSendLoading(false)
     }
   }
 
@@ -205,7 +215,7 @@ function Chat({valueChat, onExit, toUser}) {
         <div className={styles.body}>
           {
             allMessages.map((msg) => {
-              const { content, mood, sendAt, from, _id, seen} = msg;
+              const { content, mood, sendAt, from, _id, seen, type} = msg;
               let active = false;
               selectedMessages.forEach((message) => {
                 if(message._id === _id){
@@ -213,7 +223,32 @@ function Chat({valueChat, onExit, toUser}) {
                   return;
                 }
               })
-              return <Message key={_id} content={content} mood={mood} sendAt={sendAt} fill={from === fromUserId} seen={seen} onClick={handleMessageClick(msg)} active={active}/>
+              return ( 
+                  type === 'post' ?
+                  <SharedPostMessage
+                    id={content}
+                    sendAt={sendAt}
+                    seen={seen}
+                    isSendByUser={from === fromUserId}
+                  />:
+                  type === 'profile' ?
+                  <SharedProfileMessage
+                    id={content}
+                    sendAt={sendAt}
+                    seen={seen}
+                    isSendByUser={from === fromUserId}
+                  /> :
+                  <Message
+                    key={_id}
+                    content={content}
+                    mood={mood}
+                    sendAt={sendAt}
+                    fill={from === fromUserId}
+                    seen={seen}
+                    onClick={handleMessageClick(msg)}
+                    active={active}
+                  />
+              )
             })
           }
         </div>

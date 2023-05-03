@@ -4,7 +4,7 @@
 }
 
 .stroke {
-    transition: var(--transition), stroke 0.2s;
+    transition: var(--transition), stroke 0.2s, fill 0.2s;
 }
 
 .icon:hover {

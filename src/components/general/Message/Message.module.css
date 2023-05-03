@@ -29,7 +29,7 @@
 }
 
 .time {
-    font-size: 12px;
+    font-size: 10px;
     background-color: transparent;
 }
 
@@ -38,5 +38,7 @@
     color: green;
     text-align: center;
     background-color: transparent;
+    width: fit-content;
+    margin-left: auto;
 }
 

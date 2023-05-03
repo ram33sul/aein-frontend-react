@@ -1,0 +1,40 @@
+.container {
+    width: fit-content;
+    padding: 10px 0;
+    display: flex;
+    align-items: flex-end;
+    gap: 5px;
+}
+
+.user-wrapper {
+    padding: 10px;
+    border: 1px solid rgba(128, 128, 128, 0.5);
+    width: fit-content;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: var(--transition), box-shadow 0.2s;
+}
+.user-wrapper:hover{
+    box-shadow: 0 0 10px rgba(128, 128, 128, 0.5);
+}
+
+.user-wrapper:active{
+    box-shadow: 0 0 10px rgba(128, 128, 128, 1);
+}
+
+.seen-time {
+    width: fit-content;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.seen {
+    margin-left: auto;
+    width: fit-content;
+}
+
+.time {
+    font-size: 10px;
+    color: var(--foreground-color);
+}

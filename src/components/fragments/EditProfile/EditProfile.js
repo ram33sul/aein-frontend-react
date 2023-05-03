@@ -142,7 +142,7 @@ function EditProfile() {
                 <input type='file' id='image-upload' onChange={handleProfilePicSelected} style={{display: 'none', width: '100%', height: '100%'}} />
             </label>
         </div>
-        <Input label='name' value={name} onChange={(e) => updateName(setName, setNameError)(e.target.value)} error={nameError}/>
+        <Input label='Name' value={name} onChange={(e) => updateName(setName, setNameError)(e.target.value)} error={nameError}/>
         <Input label='Username' value={username} onChange={(e) => updateUsername(setUsername, setUsernameError)(e.target.value)}  error={usernameError}/>
         <div className={styles["email-and-mobile"]}>
             Email: <strong>{user?.email}</strong>
