@@ -27,7 +27,7 @@ function SharedProfileMessage({id, seen, sendAt, isSendByUser }) {
                 gap='5px'/>
         </div>
         <div className={styles["seen-time"]}>
-            { seen && isSendByUser? '' :
+            { !seen || !isSendByUser? '' :
             <div className={styles.seen}>
                 <SeenIcon />
             </div> }

@@ -227,6 +227,7 @@ function Chat({valueChat, onExit, toUser}) {
                   type === 'post' ?
                   <SharedPostMessage
                     id={content}
+                    key={_id}
                     sendAt={sendAt}
                     seen={seen}
                     isSendByUser={from === fromUserId}
@@ -234,6 +235,7 @@ function Chat({valueChat, onExit, toUser}) {
                   type === 'profile' ?
                   <SharedProfileMessage
                     id={content}
+                    key={_id}
                     sendAt={sendAt}
                     seen={seen}
                     isSendByUser={from === fromUserId}

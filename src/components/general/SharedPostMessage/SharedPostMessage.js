@@ -60,7 +60,7 @@ function SharePostMessage({id, seen, sendAt, isSendByUser}) {
                     }
                 </div>
                 <div className={styles["seen-time"]}>
-                    { seen && isSendByUser? '' :
+                    { !seen || !isSendByUser? '' :
                     <div className={styles.seen}>
                         <SeenIcon />
                     </div> }
