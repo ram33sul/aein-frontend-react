@@ -1,6 +1,6 @@
 import React from 'react'
 
-function SettingsIcon({active, height, width}) {
+function SettingsIcon({active, height, width, opacity}) {
 
     height = height ?? '30px';
     width = width ?? '30px';
@@ -8,7 +8,7 @@ function SettingsIcon({active, height, width}) {
     const backgroundColor = 'var(--background-color)';
   return (
     <div style={{width, height}}>
-        <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" opacity={opacity}>
         <g clipPath="url(#clip0_1_2)">
         <circle cx="50" cy="50" r="47.5" fill={foregroundColor}/>
         <circle cx="50" cy="50" r="46" stroke={ backgroundColor} strokeWidth="15" strokeDasharray="15 14" fill='none'/>

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import styles from './Navbar.module.css'
 import Logo from '../../general/Logo/Logo'
 import Navicon from '../../general/Navicon/Navicon'
@@ -7,9 +7,11 @@ import UsernameText from '../../general/UsernameText/UsernameText'
 import useMediaQuery from '../../../customHooks/mediaQuery'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+import { NotificationContext } from '../../../context/notificationContext'
 
 function Navbar({active}) {
 
+    const [ notificationsCount, setNotificationsCount] = useState(0)
     
     const params = new URLSearchParams(window.location.search);
 
@@ -29,6 +31,30 @@ function Navbar({active}) {
 
     const navigate = useNavigate()
  
+    const { notificationWs } = useContext(NotificationContext);
+
+    useEffect(() => {
+        notificationWs.onopen = () => {
+            notificationWs.send(JSON.stringify({
+                type: "GET_NOTIFICATIONS_COUNT"
+            }))
+        }
+        if(notificationWs.readyState === 1){
+            notificationWs.send(JSON.stringify({
+                type: "GET_NOTIFICATIONS_COUNT"
+            }))
+        }
+        notificationWs.onmessage = (res) => {
+            const { data, type } = JSON.parse(res.data)
+            if(type === 'GET_NOTIFICATIONS_COUNT'){
+                setNotificationsCount(data)
+            } else {
+                notificationWs.send(JSON.stringify({
+                    type: "GET_NOTIFICATIONS_COUNT"
+                }))
+            }
+        }
+    },[notificationWs])
 
   return (
     <div className={styles.wrapper}>
@@ -39,7 +65,7 @@ function Navbar({active}) {
             <div className={styles['buttons-container']}>
                 <Navicon icon='feed' label='Feed' active={feed} onClick={() => navigate('/')}/>
                 <Navicon icon='explore' label='Explore' active={explore} onClick={() => navigate('/explore')}/>
-                <Navicon icon='notifications' label='Notifications' active={notifications} onClick={() => navigate('/notifications')}/>
+                <Navicon count={notificationsCount > 9 ? '9+' : notificationsCount} icon='notifications' label='Notifications' active={notifications} onClick={() => navigate('/notifications')}/>
                 <Navicon icon={icon.toLowerCase()} label={icon} active={iconActive} onClick={() => navigate(`/${icon.toLowerCase()}`)}/>
             </div>
             <div className={styles.profileWrap} onClick={() => navigate(`/profile?username=${username}`)}>

@@ -1,14 +1,17 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import styles from './LikeIcon.module.css';
 import axios from 'axios';
+import { NotificationContext } from '../../../context/notificationContext';
 
-function LikeIcon({height, width, active, onClick, postId, userId, setPostFunction}) {
+function LikeIcon({height, width, active, onClick, postId, userId, setPostFunction, postedUser}) {
 
     height = height ?? '25px';
     width = width ?? '25px';
     const foregroundColor = 'var(--foreground-color)';
     const backgroundColor = 'var(--background-color)';
     const goldColor = 'var(--gold-color)';
+
+    const { notificationWs } = useContext(NotificationContext);
 
     const handleLike = () => {
       onClick?.();
@@ -18,6 +21,9 @@ function LikeIcon({height, width, active, onClick, postId, userId, setPostFuncti
           postId
         }).then((response) => {
             setPostFunction?.(response.data)
+            if(notificationWs.readyState === 1){
+              notificationWs.send(JSON.stringify({data: {to: postedUser?._id, on: postId}, type: "UNLIKE"}))
+            }
         }).catch((error) => {
           console.log(error);
         })
@@ -27,6 +33,9 @@ function LikeIcon({height, width, active, onClick, postId, userId, setPostFuncti
           postId
         }).then((response) => {
           setPostFunction?.(response.data)
+          if(notificationWs.readyState === 1){
+            notificationWs.send(JSON.stringify({data: {to: postedUser?._id, on: postId}, type: "LIKE"}))
+          }
         }).catch((error) => {
           console.log(error);
         })

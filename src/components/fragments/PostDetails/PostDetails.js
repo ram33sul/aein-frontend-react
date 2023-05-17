@@ -13,6 +13,28 @@ function PostDetails() {
     const id = params.get("id");
     const activePage = params.get("activePage");
 
+    const incrementCommentsCount = () => {
+        setPostData({
+            ...postData,
+            commentsCount: postData?.commentsCount+1
+        })
+    }
+
+    const decrementCommentsCount = () => {
+        setPostData({
+            ...postData,
+            commentsCount: postData?.commentsCount-1
+        })
+    }
+
+    const incrementRepliesCount = () => {
+        setPostData({
+            ...postData,
+            repliesCount: postData?.repliesCount+1
+        })
+    }
+
+
     useEffect(() => {
         if(id){
             axios.get(`/post/postDetails?id=${id}`).then((response) => {
@@ -27,9 +49,9 @@ function PostDetails() {
     <div className={styles.container}>
         <Post postData={postData} />
         {   activePage === 'comments' ? 
-                <CommentBox postId={id}/> : 
+                <CommentBox postUserId = {postData?.userId} postId={id} incrementCommentsCount={incrementCommentsCount} decrementCommentsCount={decrementCommentsCount}/> : 
             activePage === 'replies' ?
-                <RepliesBox postId={id} /> :
+                <RepliesBox postUserId = {postData?.userId} postId={id} incrementRepliesCount={incrementRepliesCount} /> :
             ''
         }
     </div>

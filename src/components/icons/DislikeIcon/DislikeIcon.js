@@ -1,13 +1,16 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import styles from './DislikeIcon.module.css'
 import axios from 'axios';
+import { NotificationContext } from '../../../context/notificationContext';
 
-function DislikeIcon({active, height, width, onClick, userId, postId, setPostFunction}) {
+function DislikeIcon({active, height, width, onClick, userId, postId, setPostFunction, postedUser}) {
 
     height = height ?? '25px';
     width = width ?? '25px';
     const foregroundColor = 'var(--foreground-color)';
     const backgroundColor = 'var(--background-color)';
+
+    const { notificationWs } = useContext(NotificationContext);
 
     const handledisLike = () => {
       onClick?.();
@@ -17,6 +20,9 @@ function DislikeIcon({active, height, width, onClick, userId, postId, setPostFun
           postId
         }).then((response) => {
             setPostFunction?.(response.data)
+            if(notificationWs.readyState === 1){
+              notificationWs.send(JSON.stringify({data: {to: postedUser?._id, on: postId}, type: "UNDISLIKE"}))
+            }
         }).catch((error) => {
           console.log(error);
         })
@@ -26,6 +32,9 @@ function DislikeIcon({active, height, width, onClick, userId, postId, setPostFun
           postId
         }).then((response) => {
           setPostFunction?.(response.data)
+            if(notificationWs.readyState === 1){
+              notificationWs.send(JSON.stringify({data: {to: postedUser?._id, on: postId}, type: "DISLIKE"}))
+            }
         }).catch((error) => {
           console.log(error);
         })

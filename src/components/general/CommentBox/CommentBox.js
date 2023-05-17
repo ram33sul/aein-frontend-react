@@ -1,17 +1,20 @@
-import React, { useEffect, useState} from 'react';
+import React, { useContext, useEffect, useState} from 'react';
 import styles from './CommentBox.module.css';
 import InputMessage from '../InputMessage/InputMessage';
 import Comment from '../Comment/Comment';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { useScrollToBottom } from '../../../services/services';
+import { NotificationContext } from '../../../context/notificationContext';
 
-function CommentBox({postId}) {
+function CommentBox({postId, incrementCommentsCount, decrementCommentsCount, postUserId}) {
 
     const user = useSelector(state => state.user.user);
     const [ comments, setComments ] = useState(null);
 
     const commentsWrapper = useScrollToBottom(comments)
+
+    const { notificationWs } = useContext(NotificationContext);
 
     const handleSendComment = (comment) => {
         return new Promise((resolve, reject) => {
@@ -20,13 +23,19 @@ function CommentBox({postId}) {
                 postId,
                 content: comment
             }).then((response) => {
-                setComments(comments => [...comments, {
-                    _id: comments?.length,
-                    userId: user?._id,
-                    postId,
-                    content: comment
-                }])
+                console.log(response);
+                // setComments(comments => [...comments, {
+                //     _id: comments?.length,
+                //     userId: user?._id,
+                //     postId,
+                //     content: comment
+                // }])
+                setComments(response.data);
+                incrementCommentsCount?.()
                 resolve(true)
+                if(notificationWs.readyState === 1){
+                    notificationWs.send(JSON.stringify({data: {to: postUserId, on: postId}, type: "COMMENT"}))
+                }
             }).catch((error) => {
                 reject(false)
                 console.log(error);
@@ -49,7 +58,7 @@ function CommentBox({postId}) {
                 <div className={styles["comments-wrapper"]} ref={commentsWrapper}>
                 {
                     comments.map((comment) => {
-                        return <Comment {...comment} key={comment._id}/>
+                        return <Comment {...comment} key={comment._id} decrementCommentsCount={decrementCommentsCount}/>
                     })
                 } </div> : ''
             }

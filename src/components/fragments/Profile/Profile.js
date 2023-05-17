@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import styles from './Profile.module.css';
 import ProfilePicture from "../../general/ProfilePicture/ProfilePicture";
 import UsernameText from "../../general/UsernameText/UsernameText";
@@ -12,6 +12,7 @@ import MoreOptionIcon from "../../icons/MoreOptionIcon/MoreOptionIcon";
 import DisplayMessage from "../../general/DisplayMessage/DisplayMessage";
 import Post from "../../general/Post/Post";
 import ShareIcon from "../../icons/ShareIcon/ShareIcon";
+import { NotificationContext } from "../../../context/notificationContext";
 
 
 function Profile() {
@@ -32,6 +33,9 @@ function Profile() {
     const [ followLoading, setFollowLoading ] = useState(false);
     const [ showDisplayMessage, setShowDisplayMessage ] = useState(false)
     const [ posts, setPosts ] = useState([])
+
+    const { notificationWs } = useContext(NotificationContext);
+
     const navigate = useNavigate();
 
     const handleLogout = () => {
@@ -51,6 +55,9 @@ function Profile() {
             followedUserId: user._id
         }).then((response) => {
             dispatch(fetchUserSuccess(response.data))
+            if(notificationWs.readyState === 1){
+                notificationWs.send(JSON.stringify({type: "FOLLOW", data: {to: user?._id}}))
+            }
         }).catch((error) => {
             setShowDisplayMessage({message: error.response.data[0].message, color: 'red'});
         }).finally(() => {
@@ -65,6 +72,9 @@ function Profile() {
             unfollowedUserId: user._id
         }).then((response) => {
             dispatch(fetchUserSuccess(response.data))
+            if(notificationWs.readyState === 1){
+                notificationWs.send(JSON.stringify({type: "UNFOLLOW", data: {to: user?._id}}))
+            }
         }).catch((error) => {
             showDisplayMessage({message: error.response.data[0].message, color: 'red'})
         }).finally(() => {

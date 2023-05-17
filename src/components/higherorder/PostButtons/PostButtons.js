@@ -1,7 +1,7 @@
 import React from 'react'
 import styles from './PostButtons.module.css'
 import { useSelector } from 'react-redux';
-function PostButtons({Component, count, active, postId, setPostFunction, onClick, profileId}) {
+function PostButtons({Component, count, active, postId, setPostFunction, onClick, profileId, postedUser}) {
     Component = Component ?? <div />
     count ??= 0;
     active ??= false;
@@ -11,7 +11,7 @@ function PostButtons({Component, count, active, postId, setPostFunction, onClick
 
   return (
     <div className={styles.container} onClick={onClick}>
-        <Component active={active} userId={user?._id} postId={postId} profileId={profileId} setPostFunction={setPostFunction}/>
+        <Component postedUser={postedUser} active={active} userId={user?._id} postId={postId} profileId={profileId} setPostFunction={setPostFunction}/>
         <div className={styles.count}>
             {count}
         </div>

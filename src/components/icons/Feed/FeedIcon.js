@@ -1,6 +1,6 @@
 import React from 'react'
 
-function FeedIcon({scale, active, height, width}) {
+function FeedIcon({scale, active, height, width, opacity}) {
 
     height = height ?? '30px';
     width = width ?? '30px';
@@ -8,7 +8,7 @@ function FeedIcon({scale, active, height, width}) {
     const backgroundColor = 'var(--background-color)';
   return (
     <div style={{height, width }}>
-    <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" >
+    <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" opacity={opacity}>
         <g id="feed-icon" clipPath="url(#clip0_0_1)" fill='none'>
             <rect id="Rectangle1" x="5" y="5" width="90" height="90" rx="25" strokeWidth="10" fill={active ? foregroundColor : 'none'} style={{stroke: foregroundColor}}/>
             <rect id="Rectangle2" x="18" y="19" width="50" height="15" rx="5" fill={active ? backgroundColor : foregroundColor}/>

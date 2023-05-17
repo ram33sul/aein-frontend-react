@@ -31,6 +31,8 @@ function Login() {
 
     const [ buttonLoading, setButtonLoading ] = useState(false);
 
+    const [ timer, setTimer ] = useState(5 * 60);
+
     const dispatch = useDispatch();
 
     const navigate = useNavigate();
@@ -62,6 +64,7 @@ function Login() {
 
     const handleSendOtp = () => {
         setErrorMessage('');
+        setTimer(5 * 60)
         if(mobileInput.length === 0){
             return setErrorMessage("Mobile is required!")
         }
@@ -129,6 +132,7 @@ function Login() {
             setPasswordInput('');
             setConfirmPasswordInput('');
     }
+
     useEffect(() => {
         setErrorMessage('');
 
@@ -147,6 +151,23 @@ function Login() {
         )
     },[handleGoogleLogin])
 
+    useEffect(() => {
+        if(verifyOtpPage){
+            const interval = setInterval(() => {
+                setTimer(prev =>  prev - 1);
+            },1000)
+            return () => {
+                clearInterval(interval)
+            }
+        }
+    },[verifyOtpPage])
+
+    useEffect(() => {
+        if(verifyOtpPage && timer <= 0){
+            handleGoBack();
+        }
+    },[verifyOtpPage, timer])
+
   return (
     <div className={styles.container}>
         <Logo />
@@ -160,6 +181,14 @@ function Login() {
         </> : verifyOtpPage ? 
         <>
             <span className={styles.span} style={{fontWeight: 'bold'}}>{verifyOtpPage}</span>
+            <div className={styles["timeout-resend-button-wrapper"]}>
+                <div className={styles["timeout"]}>
+                    Timeouts in 0{Math.floor(timer/60)}:{timer%60 < 10 ? `0${timer%60}` : timer%60}
+                </div>
+                <div className={styles["resend-button"]} onClick={handleSendOtp}>
+                    Resend
+                </div>
+            </div>
             <Input label='OTP code' value={otpCode} onChange={(e) => setOtpCode(e.target.value)} />
             <Button width='100%' maxWidth='300px' content='Verify OTP' onClick={handleVerifyOtp} loading={buttonLoading}/>
             <span className={styles.span} onClick={handleGoBack}>Go back</span>

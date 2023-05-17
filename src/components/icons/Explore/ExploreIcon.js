@@ -1,6 +1,6 @@
 import React from 'react'
 
-function ExploreIcon({ active, height, width}) {
+function ExploreIcon({ active, height, width, opacity}) {
 
     height = height ?? '30px';
     width = width ?? '30px';
@@ -9,7 +9,7 @@ function ExploreIcon({ active, height, width}) {
     const backgroundColor = 'var(--background-color)';
   return (
     <div style={{width, height}} >
-    <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" opacity={opacity}>
         <g id="explore-icon" clipPath="url(#clip0_1_2)" fill='none'>
             <circle id="circle" cx="50" cy="50" r="45" stroke={foregroundColor} strokeWidth="10" fill={active ? foregroundColor : 'none'}/>
             <path id="triangle1" d="M21.0711 22.0711L53.7113 42.4638L41.4638 54.7113L21.0711 22.0711Z" fill={active ? backgroundColor : foregroundColor}/>

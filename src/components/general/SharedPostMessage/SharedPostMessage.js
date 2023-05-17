@@ -17,6 +17,9 @@ function SharePostMessage({id, seen, sendAt, isSendByUser}) {
 
     useEffect(() => {
         axios.get(`/post/postDetails?id=${id}`).then((response) => {
+            if(!response.data?.message){
+                return;
+            }
             setMessages(response.data?.messages);
             axios.get(`/user/userDetails?userId=${response.data?.userId}`).then((response) => {
                 setPostedUser(response.data)
@@ -46,7 +49,7 @@ function SharePostMessage({id, seen, sendAt, isSendByUser}) {
             <div  className={styles["messages-seen-time"]} style={isSendByUser ? {flexDirection: 'row-reverse'} : {}}>
                 <div onClick={() => navigate(`/postDetails?id=${id}`)} className={styles["messages-wrapper"]} style={isSendByUser ? {borderBottomRightRadius: 0} : {borderBottomLeftRadius: 0}}>
                     {
-                        messages.map(message => {
+                        messages?.map(message => {
                             const {_id, content, mood, from} = message
                             return (
                                 <Message

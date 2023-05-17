@@ -34,3 +34,24 @@
     color: red;
     font-weight: normal;
 }
+
+.timeout-resend-button-wrapper{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    gap: 10px;
+}
+
+.timeout {
+    width: fit-content;
+    color: var(--foreground-color);
+}
+
+.resend-button {
+    padding: 3px;
+    border: 1px solid silver;
+    cursor: pointer;
+    font-size: 12px;
+    border-radius: 5px;
+    color: var(--foreground-color);
+}

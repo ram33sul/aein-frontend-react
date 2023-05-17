@@ -32,37 +32,7 @@ function Chat({valueChat, onExit, toUser}) {
   const ws = state.webSocket.ws;
   const fromUserId = user?._id;
 
-  const moods = [
-    {
-      name: 'humour',
-      color: 'green',
-      status: true
-    },{
-      name: 'sad',
-      color: 'gold',
-      status: true
-    },{
-      name: 'angry',
-      color: 'orange',
-      status: true
-    },{
-      name: 'happy',
-      color: 'blue',
-      status: true
-    },{
-      name: 'alert',
-      color: 'red',
-      status: true
-    },{
-      name: 'facts',
-      color: 'purple',
-      status: true
-    },{
-      name: 'amazed',
-      color: 'violet',
-      status: true
-    }
-  ]
+  const [ moods, setMoods ] = useState([])
 
   const handleMessageClick = (selectedMessage) => {
     return () => {
@@ -147,6 +117,8 @@ function Chat({valueChat, onExit, toUser}) {
         ws.send(JSON.stringify({viewedUser: fromUserId, sentUser: toUser?._id, type: "markSeen"}));
       }
       setSendLoading(false)
+    } else if (message.type === 'getMoods') {
+      setMoods(message.messageData);
     }
   }
 
@@ -162,6 +134,7 @@ function Chat({valueChat, onExit, toUser}) {
     if(ws.readyState === 1){
       ws.send(JSON.stringify({from: fromUserId, to: toUser?._id, type: "getMessages", markSeen: {viewedUser: fromUserId, sentUser: toUser._id}}));
       ws.send(JSON.stringify({userIdToBeChecked: toUser?._id, userIdWhoIsChecking: fromUserId, type: "isOnline"}));
+      ws.send(JSON.stringify({userId: fromUserId, type: "getMoods"}))
     }
   },[fromUserId, toUser, ws]);
 
@@ -258,7 +231,7 @@ function Chat({valueChat, onExit, toUser}) {
         <div className={styles["footer-wrapper"]}>
           <div className={styles["mood-container"]}>
             { moods.map((data) => {
-              return <MoodButton name={data.name} color={data.color} onClick={handleMoodSelect(data)} fill={data.name === mood.name} key={data.name}/>
+              return <MoodButton name={data.name} color={data.color} onClick={handleMoodSelect(data)} fill={data.name === mood.name} key={data._id}/>
             })}
           </div> 
           <div className={styles.footer}>

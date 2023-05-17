@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import './App.css';
 import Home from './pages/Home/Home';
 import { Routes, Route, Navigate } from 'react-router-dom';
@@ -7,12 +7,15 @@ import Signup from './pages/Signup/Signup';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchUserFailure, fetchUserLogout, fetchUserRequest, fetchUserSuccess } from './redux/user/userActions';
 import axios from 'axios';
+import { NotificationContext } from './context/notificationContext';
 
 function App() {
   const state = useSelector((state) => state);
   const user = state.user.user
   const userLoading = state.user.loading;
   const dispatch = useDispatch();
+
+  const [ notificationWs, setNotificationWs ] = useState({})
 
   useEffect(() => {
     const theme = JSON.parse(localStorage.getItem("aein-app-theme"));
@@ -38,6 +41,7 @@ function App() {
     })
   },[dispatch])
   return (
+    <NotificationContext.Provider value={{notificationWs, setNotificationWs}}>
       <div className='container'>
         {userLoading ? '' :
         <Routes>
@@ -47,6 +51,7 @@ function App() {
         </Routes>
         }
       </div>
+      </NotificationContext.Provider>
   );
 }
 

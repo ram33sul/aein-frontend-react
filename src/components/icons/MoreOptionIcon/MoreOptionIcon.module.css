@@ -1,5 +1,5 @@
 .container {
-    width: 30px;
+    width: 25px;
     display: flex;
     justify-content: space-between;
     background-color: transparent;
@@ -9,10 +9,11 @@
 }
 
 .round {
-    width: 7px;
-    height: 7px;
+    width: 6px;
+    height: 6px;
     border-radius: 7px;
     background-color: var(--foreground-color);
+    opacity: 0.7;
 }
 
 .container:hover {
